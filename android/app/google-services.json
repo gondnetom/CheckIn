@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "806192570947",
+    "project_id": "checkschool-96cc5",
+    "storage_bucket": "checkschool-96cc5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:806192570947:android:c3d4af950f159531816af6",
+        "android_client_info": {
+          "package_name": "com.gondnetom.checkschool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "806192570947-g603a2gn2hjimtkof5eta2fco99lst43.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAc_mGk7pgVWeklQnvkcKVzmWeO58N8s3g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "806192570947-g603a2gn2hjimtkof5eta2fco99lst43.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
