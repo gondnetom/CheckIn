@@ -1,20 +1,20 @@
-import 'package:checkschool/MainPage/Signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:google_fonts/google_fonts.dart';
-import 'package:checkschool/MainPage/MainMenu.dart';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wifi_info_flutter/wifi_info_flutter.dart';
 
-import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:platform_device_id/platform_device_id.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:checkschool/MainPage/Signup.dart';
+import 'package:checkschool/MainPage/MainMenu.dart';
 import 'Setting.dart';
 
 class Check extends StatefulWidget {
@@ -46,6 +46,7 @@ class _CheckState extends State<Check> {
     var list = Map();
     bool isiOS = foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS;
 
+    //Get Android location data
     if (!isiOS) {
       print ( 'Android 권한 확인 중' );
       var status =  await  Permission .location.status;
@@ -65,7 +66,8 @@ class _CheckState extends State<Check> {
     if (connectivityResult == ConnectivityResult.mobile) {
       list["Network"] = "확인불가";
       print("wifiName");
-    } else if (connectivityResult == ConnectivityResult.wifi) {
+    }
+    else if (connectivityResult == ConnectivityResult.wifi) {
       var wifiName = await WifiInfo().getWifiName();
       switch(wifiName){
         case "gbshs":
@@ -153,15 +155,8 @@ class _CheckState extends State<Check> {
       list["Network"] = "None";
     }
 
-
-    var deviceInfo = DeviceInfoPlugin();
-    if (isiOS) { // import 'dart:io'
-      var iosDeviceInfo = await deviceInfo.iosInfo;
-      list["DeviceId"] =  await iosDeviceInfo.identifierForVendor; // unique ID on iOS
-    } else {
-      var androidDeviceInfo = await deviceInfo.androidInfo;
-      list["DeviceId"] = await androidDeviceInfo.androidId; // unique ID on Android
-    }
+    //get my id
+    list["DeviceId"] =  await PlatformDeviceId.getDeviceId;
 
     //check my id
     if(first && list["Network"] != "None"){

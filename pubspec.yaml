@@ -32,7 +32,7 @@ dependencies:
   google_fonts:
 
   #Check
-  device_info:
+  platform_device_id: ^0.3.1
   connectivity:
   wifi_info_flutter:
   permission_handler:
