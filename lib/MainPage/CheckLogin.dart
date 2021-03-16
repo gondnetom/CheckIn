@@ -7,11 +7,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:wifi_info_flutter/wifi_info_flutter.dart';
 
-import 'package:flutter/foundation.dart' as foundation;
 import 'package:platform_device_id/platform_device_id.dart';
+import 'package:location/location.dart';
 
 import 'package:checkschool/MainPage/Signup.dart';
 import 'package:checkschool/MainPage/MainMenu.dart';
@@ -44,22 +43,31 @@ class _CheckState extends State<Check> {
   var subscription;
   Future CheckStates() async{
     var list = Map();
-    bool isiOS = foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS;
 
     //Get Android location data
-    if (!isiOS) {
-      print ( 'Android 권한 확인 중' );
-      var status =  await  Permission .location.status;
-      if (status.isDenied || status.isRestricted) {
-        if ( await  Permission .location. request () .isGranted) {
-          print ( '위치 권한 부여됨' );
-        }else{
-          print ( '위치 권한이 부여되지 않음' );
-        }
-      }else{
-        print ( '권한이 이미 부여되었습니다 (이전 실행?)' );
+    Location location = new Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
       }
     }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.DENIED) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.GRANTED) {
+        return;
+      }
+    }
+
+    _locationData = await location.getLocation();
 
     //check wifi
     var connectivityResult = await (Connectivity().checkConnectivity());
