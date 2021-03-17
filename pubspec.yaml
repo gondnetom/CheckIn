@@ -24,24 +24,24 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cloud_firestore: ^1.0.1
-  firebase_core: ^1.0.1
+  cloud_firestore: ^1.0.0
+  firebase_core: ^1.0.0
 
   # decorate
-  cupertino_icons:
-  google_fonts:
+  cupertino_icons: ^1.0.2
+  google_fonts: ^2.0.0
 
   #Check
   platform_device_id: ^0.3.1
-  connectivity:
-  wifi_info_flutter:
+  connectivity: ^3.0.2
+  wifi_info_flutter: ^2.0.0
 
-  top_snackbar_flutter:
-  modal_bottom_sheet:
+  top_snackbar_flutter: ^1.0.0
+  modal_bottom_sheet: ^2.0.0
 
   #setting
-  url_launcher:
-  location:
+  url_launcher: ^6.0.2
+  location: ^4.1.1
 
 dev_dependencies:
   flutter_test:
@@ -50,8 +50,8 @@ dev_dependencies:
 
   flutter_native_splash: ^1.1.0
 flutter_native_splash:
-  color: "#000000"
-  image: icon/Splash/Splash.PNG
+  color: "#ffffff"
+  image: icon/Splash/Splash.png
   android: true
   ios: true
 
