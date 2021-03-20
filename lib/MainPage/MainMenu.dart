@@ -1,3 +1,4 @@
+import 'package:checkschool/MainPage/Put_in_for.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class MainPage extends StatefulWidget {
 }
 class _MainPageState extends State<MainPage> {
   List<String> ClassName = ["자습실, 교실","물리실1","물리실2","화학실1","화학실2",
-    "생명실1","생명실2","지구과학실1","지구과학실2","도서실","음악실",
+    "생명실1","생명실2","지구과학실1","지구과학실2","천문대","도서실","음악실",
     "NoteStation2","컴퓨터실1","컴퓨터실2"];
 
   String NowRoom = "자습실";
@@ -173,6 +174,7 @@ class _MainPageState extends State<MainPage> {
         if(snapshot.hasData){
           return ListView(
             children: [
+              //사용자 정보
               Container(
                   margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
                   padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
@@ -215,6 +217,8 @@ class _MainPageState extends State<MainPage> {
                   ],
                 ),
               ),
+
+              //chekcin 하기 전
               !snapshot.data["check"] ?
               GestureDetector(
                 onTap: (){
@@ -281,6 +285,9 @@ class _MainPageState extends State<MainPage> {
                     Check();
                   }
                   else{
+                    setState(() {
+                      NowRoom = "자습실";
+                    });
                     showPicker();
                   }
                 },
@@ -303,6 +310,7 @@ class _MainPageState extends State<MainPage> {
                 ),
               ) : Container(),
 
+              //checkin 한 후
               snapshot.data["check"] && snapshot.data["nowlocation"] != "조기입실" ?
               GestureDetector(
                 onTap: (){
@@ -363,10 +371,15 @@ class _MainPageState extends State<MainPage> {
                     return;
                   }
 
-                  if(widget.NetworkCheck!= "자습실, 교실")
+                  if(widget.NetworkCheck!= "자습실, 교실"){
                     Check();
-                  else
+                  }
+                  else{
+                    setState(() {
+                      NowRoom = "자습실";
+                    });
                     showPicker();
+                  }
                 },
                 child: Container(
                   margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
@@ -386,6 +399,46 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
               ) : Container(),
+
+              //특별실 신청
+              GestureDetector(
+                onTap: (){
+                  var hour = DateTime.now().hour;
+
+                  if(!(hour<=12)){
+                    showTopSnackBar(
+                      context,
+                      CustomSnackBar.error(
+                        message:
+                        "12시 이전까지 신청할 수 있습니다!",
+                      ),
+                    );
+                    return;
+                  }
+                  
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Put_In_For(widget.DeviceId)),
+                  );
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                  padding: EdgeInsets.symmetric(vertical: 20,horizontal: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.all( Radius.circular(7), ),
+                    boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
+                      blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("특별실 신청",style: GoogleFonts.nanumGothicCoding(fontSize: 30)),
+                      Icon(CupertinoIcons.right_chevron)
+                    ],
+                  ),
+                ),
+              ),
             ],
           );
         }else{

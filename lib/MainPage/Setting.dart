@@ -43,7 +43,7 @@ class Setting extends StatelessWidget {
           ),
           ListTile(
             tileColor: Colors.grey[300],
-            leading:Icon(CupertinoIcons.ellipses_bubble,color: Colors.black,size: 30,),
+            leading:Icon(CupertinoIcons.tray_arrow_down,color: Colors.black,size: 30,),
             title:Text("문제점 연락",style: GoogleFonts.nanumGothicCoding(fontSize: 24)),
             trailing: Icon(CupertinoIcons.right_chevron,color: Colors.black,),
             onTap: (){
