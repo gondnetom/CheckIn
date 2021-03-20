@@ -184,28 +184,6 @@ class _Put_In_ForState extends State<Put_In_For> {
           ),
           Container(
             margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-            padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.all( Radius.circular(7), ),
-              boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
-                blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
-            ),
-            child: TextField(
-              controller: _tec,
-              style: TextStyle(color: Colors.black,fontSize: 20),
-              maxLines: 2,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  hintText: '신청 이유',
-                  hintStyle: TextStyle(color: Colors.grey)
-              ),
-              cursorColor: Colors.grey,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
             padding: EdgeInsets.fromLTRB(5, 15, 5,0),
             decoration: BoxDecoration(
               color: Colors.grey[300],
@@ -220,12 +198,12 @@ class _Put_In_ForState extends State<Put_In_For> {
                   children: [
                     Text("1교시",style: GoogleFonts.nanumGothicCoding(fontSize: 19)),
                     Checkbox(
-                      value: FirstClass,
-                      onChanged:(bool value){
-                        setState(() {
-                          FirstClass = value;
-                        });
-                      }
+                        value: FirstClass,
+                        onChanged:(bool value){
+                          setState(() {
+                            FirstClass = value;
+                          });
+                        }
                     )
                   ],
                 ),
@@ -271,6 +249,28 @@ class _Put_In_ForState extends State<Put_In_For> {
               ],
             ),
           ),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+            padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.all( Radius.circular(7), ),
+              boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
+                blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
+            ),
+            child: TextField(
+              controller: _tec,
+              style: TextStyle(color: Colors.black,fontSize: 20),
+              maxLines: 2,
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  hintText: '신청 이유',
+                  hintStyle: TextStyle(color: Colors.grey)
+              ),
+              cursorColor: Colors.grey,
+            ),
+          ),
           GestureDetector(
             onTap: (){
               if(RoomName == "특별실 고르기"){
@@ -279,16 +279,6 @@ class _Put_In_ForState extends State<Put_In_For> {
                   CustomSnackBar.error(
                     message:
                     "특별실을 골라주세요.",
-                  ),
-                );
-                return;
-              }
-              if(_tec.text.length ==0){
-                showTopSnackBar(
-                  context,
-                  CustomSnackBar.error(
-                    message:
-                    "신청 이유를 입력해주세요.",
                   ),
                 );
                 return;
@@ -303,6 +293,17 @@ class _Put_In_ForState extends State<Put_In_For> {
                 );
                 return;
               }
+              if(_tec.text.length ==0){
+                showTopSnackBar(
+                  context,
+                  CustomSnackBar.error(
+                    message:
+                    "신청 이유를 입력해주세요.",
+                  ),
+                );
+                return;
+              }
+
 
               ApplyRoom();
               Navigator.pop(context);
