@@ -24,42 +24,29 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cloud_firestore:
-  firebase_core:
+  cloud_firestore: ^1.0.1
+  firebase_core: ^1.0.1
 
   # decorate
-  cupertino_icons:
-  google_fonts:
+  cupertino_icons: ^1.0.2
+  google_fonts: ^2.0.0
 
   #Check
-  platform_device_id:
-  connectivity:
-  wifi_info_flutter:
+  platform_device_id: ^0.3.1
+  connectivity: ^3.0.3
+  wifi_info_flutter: ^2.0.0
 
-  top_snackbar_flutter:
-  modal_bottom_sheet:
+  top_snackbar_flutter: ^1.0.0
+  modal_bottom_sheet: ^2.0.0
 
   #setting
-  url_launcher:
-  location:
+  url_launcher: ^6.0.2
+  location: ^4.1.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
-  flutter_native_splash: "^0.3.2"
-flutter_native_splash:
-  color: "#ffffff"
-  image: icon/Splash/Splash.png
-  android: true
-  ios: true
-
-  flutter_launcher_icons: "^0.7.2"
-flutter_icons:
-  android: true
-  ios: true
-  image_path: "icon/app_icon.jpg"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspe

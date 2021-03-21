@@ -16,7 +16,7 @@ class _SignUpState extends State<SignUp> {
     await FirebaseFirestore.instance.collection("Users").doc(widget.DeviceId).
     set({"Name":_tec2.text.toString(),"Number":int.parse(_tec.text.toString()),"Date":0,"Hour":0,"Minute":0,"NowLocation":"","DeviceId":widget.DeviceId,
     "ApplyRoom":"","ApplySubject":"","ApplyDate":0,"ApplyHour":0,"ApplyMinute":0,"ApplyComment":"","ApplyTime":{},
-      "BackCheck":false,"BackComment":""});
+      "BackCheck":false,"BackComment":"","SpecialComment":""});
   }
 
   TextEditingController _tec = TextEditingController();

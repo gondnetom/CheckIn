@@ -1,4 +1,5 @@
 import 'package:checkschool/MainPage/Put_in_for.dart';
+import 'package:checkschool/MainPage/SpecialCircumstance.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,7 @@ class _MainPageState extends State<MainPage> {
     var minute = DateTime.now().minute;
 
     await FirebaseFirestore.instance.collection("Users").doc(widget.DeviceId).
-    update({"Date":date,"Hour":hour,"Minute":minute,"NowLocation":"조기입실"});
+    update({"Date":date,"Hour":hour,"Minute":minute,"NowLocation":"조기입실","SpecialComment":""});
 
     setState(() {
     });
@@ -47,7 +48,7 @@ class _MainPageState extends State<MainPage> {
     var minute = DateTime.now().minute;
 
     await FirebaseFirestore.instance.collection("Users").doc(widget.DeviceId).
-    update({"Date":date,"Hour":hour,"Minute":minute,"NowLocation":widget.NetworkCheck});
+    update({"Date":date,"Hour":hour,"Minute":minute,"NowLocation":widget.NetworkCheck,"SpecialComment":""});
 
     setState(() {
     });
@@ -141,7 +142,7 @@ class _MainPageState extends State<MainPage> {
     var minute = DateTime.now().minute;
 
     await FirebaseFirestore.instance.collection("Users").doc(widget.DeviceId).
-    update({"Date":date,"Hour":hour,"Minute":minute,"NowLocation":RoomName});
+    update({"Date":date,"Hour":hour,"Minute":minute,"NowLocation":RoomName,"SpecialComment":""});
 
     setState(() {
     });
@@ -214,8 +215,8 @@ class _MainPageState extends State<MainPage> {
                 ),
               ),
 
-              //chekcin 하기 전
-              !(documents["Date"]==date) ?
+              //CheckIn
+              documents["NowLocation"] != "조기입실" ?
               GestureDetector(
                 onTap: (){
                   var hour = DateTime.now().hour;
@@ -245,13 +246,13 @@ class _MainPageState extends State<MainPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("조기입실~",style: GoogleFonts.nanumGothicCoding(fontSize: 30)),
+                      Text("조기입실",style: GoogleFonts.nanumGothicCoding(fontSize: 30)),
                       Icon(CupertinoIcons.check_mark)
                     ],
                   ),
                 ),
               ) : Container(),
-              !(documents["Date"]==date)  ?
+              documents["NowLocation"] != "조기입실"  ?
               GestureDetector(
                 onTap: (){
                   var hour = DateTime.now().hour;
@@ -299,18 +300,17 @@ class _MainPageState extends State<MainPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("출석하기!",style: GoogleFonts.nanumGothicCoding(fontSize: 30)),
+                      Text("${documents["Date"]!=date ? "출석하기":"현재위치 변경"}",style: GoogleFonts.nanumGothicCoding(fontSize: 30)),
                       Icon(CupertinoIcons.check_mark)
                     ],
                   ),
                 ),
               ) : Container(),
-
-              //checkin 한 후
-              documents["Date"]==date && documents["NowLocation"] != "조기입실" ?
+              documents["NowLocation"] != "조기입실"  ?
               GestureDetector(
                 onTap: (){
                   var hour = DateTime.now().hour;
+                  print(hour);
                   if(!(hour>=18&&hour<=24)){
                     showTopSnackBar(
                       context,
@@ -322,7 +322,10 @@ class _MainPageState extends State<MainPage> {
                     return;
                   }
 
-                  EarlyEnter();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SpecialCircumstance(widget.DeviceId)),
+                  );
                 },
                 child: Container(
                   margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
@@ -336,65 +339,13 @@ class _MainPageState extends State<MainPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("조기입실~",style: GoogleFonts.nanumGothicCoding(fontSize: 30)),
+                      Text("특이사항",style: GoogleFonts.nanumGothicCoding(fontSize: 30)),
                       Icon(CupertinoIcons.check_mark)
                     ],
                   ),
                 ),
               ) : Container(),
-              documents["Date"]==date && documents["NowLocation"] != "조기입실"?
-              GestureDetector(
-                onTap: (){
-                  var hour = DateTime.now().hour;
-                  if(!(hour>=18&&hour<=24)){
-                    showTopSnackBar(
-                      context,
-                      CustomSnackBar.error(
-                        message:
-                        "6시 이후부터 출석할 수 있습니다!",
-                      ),
-                    );
-                    return;
-                  }
-                  if(!ClassName.contains(widget.NetworkCheck)){
-                    showTopSnackBar(
-                      context,
-                      CustomSnackBar.error(
-                        message:
-                        "학교 와이파이 안에서만 출석 가능합니다",
-                      ),
-                    );
-                    return;
-                  }
 
-                  if(widget.NetworkCheck!= "자습실, 교실"){
-                    Check();
-                  }
-                  else{
-                    setState(() {
-                      NowRoom = "자습실";
-                    });
-                    showPicker();
-                  }
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-                  padding: EdgeInsets.symmetric(vertical: 20,horizontal: 5),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.all( Radius.circular(7), ),
-                    boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
-                      blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("현재위치변경!",style: GoogleFonts.nanumGothicCoding(fontSize: 30)),
-                      Icon(CupertinoIcons.check_mark)
-                    ],
-                  ),
-                ),
-              ) : Container(),
 
               //특별실 신청
               !(documents["ApplyDate"]==date) ?
@@ -434,7 +385,6 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
               ) : Container(),
-
               documents["ApplyDate"]==date ?
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
@@ -534,7 +484,7 @@ class _MainPageState extends State<MainPage> {
 
                     //Commnet
                     documents["BackComment"] != "" ?
-                    Text("의: ${documents["BackComment"]}",style: GoogleFonts.nanumGothicCoding(fontSize: 20)):Container(),
+                    Text("의견: ${documents["BackComment"]}",style: GoogleFonts.nanumGothicCoding(fontSize: 20)):Container(),
                   ],
                 ),
               ) : Container(),

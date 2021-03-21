@@ -149,6 +149,7 @@ class _Put_In_ForState extends State<Put_In_For> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         leading:IconButton(
           icon:Icon(CupertinoIcons.left_chevron,color: Colors.black,),
           onPressed: (){
@@ -156,7 +157,7 @@ class _Put_In_ForState extends State<Put_In_For> {
           },
         ),
       ),
-      body: ListView(
+      body: Column(
         children: [
           GestureDetector(
             onTap: (){
@@ -309,17 +310,17 @@ class _Put_In_ForState extends State<Put_In_For> {
               Navigator.pop(context);
             },
             child: Container(
-              margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-              padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.all( Radius.circular(7), ),
-                boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
-                  blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
-              ),
-              child: Center(
-                child: Text("신청하기",style: GoogleFonts.nanumGothicCoding(fontSize: 20,color: Colors.white)),
-              )
+                margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.all( Radius.circular(7), ),
+                  boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
+                    blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
+                ),
+                child: Center(
+                  child: Text("신청하기",style: GoogleFonts.nanumGothicCoding(fontSize: 20,color: Colors.white)),
+                )
             ),
           ),
         ],
