@@ -119,9 +119,9 @@ class _Put_In_ForState extends State<Put_In_For> {
         Subject = "화학";
         break;
 
-      case "생물실1":
-      case "생물실2":
-        Subject = "생물";
+      case "생명실1":
+      case "생명실2":
+        Subject = "생명";
         break;
 
       case "지구과학실1":
