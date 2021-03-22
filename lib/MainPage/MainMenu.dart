@@ -216,7 +216,7 @@ class _MainPageState extends State<MainPage> {
               ),
 
               //CheckIn
-              documents["NowLocation"] != "조기입실" ?
+              documents["Date"] != date||(documents["Date"] == date && documents["NowLocation"] != "조기입실") ?
               GestureDetector(
                 onTap: (){
                   var hour = DateTime.now().hour;
@@ -252,7 +252,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
               ) : Container(),
-              documents["NowLocation"] != "조기입실"  ?
+              documents["Date"] != date||(documents["Date"] == date && documents["NowLocation"] != "조기입실")  ?
               GestureDetector(
                 onTap: (){
                   var hour = DateTime.now().hour;
@@ -268,12 +268,9 @@ class _MainPageState extends State<MainPage> {
                     return;
                   }
                   if(!ClassName.contains(widget.NetworkCheck)){
-                    showTopSnackBar(
+                    Navigator.push(
                       context,
-                      CustomSnackBar.error(
-                        message:
-                        "학교 와이파이 안에서만 출석 가능합니다",
-                      ),
+                      MaterialPageRoute(builder: (context) => SpecialCircumstance(widget.DeviceId)),
                     );
                     return;
                   }
@@ -300,59 +297,19 @@ class _MainPageState extends State<MainPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("${documents["Date"]!=date ? "출석하기":"현재위치 변경"}",style: GoogleFonts.nanumGothicCoding(fontSize: 30)),
+                      Text("${documents["Date"] == date?"현재위치 변경":"출석하기"}",style: GoogleFonts.nanumGothicCoding(fontSize: 30)),
                       Icon(CupertinoIcons.check_mark)
                     ],
                   ),
                 ),
               ) : Container(),
-              documents["NowLocation"] != "조기입실"  ?
-              GestureDetector(
-                onTap: (){
-                  var hour = DateTime.now().hour;
-                  print(hour);
-                  if(!(hour>=18&&hour<=24)){
-                    showTopSnackBar(
-                      context,
-                      CustomSnackBar.error(
-                        message:
-                        "6시 이후부터 출석할 수 있습니다!",
-                      ),
-                    );
-                    return;
-                  }
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SpecialCircumstance(widget.DeviceId)),
-                  );
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-                  padding: EdgeInsets.symmetric(vertical: 20,horizontal: 5),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.all( Radius.circular(7), ),
-                    boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
-                      blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("특이사항",style: GoogleFonts.nanumGothicCoding(fontSize: 30)),
-                      Icon(CupertinoIcons.check_mark)
-                    ],
-                  ),
-                ),
-              ) : Container(),
-
 
               //특별실 신청
               !(documents["ApplyDate"]==date) ?
               GestureDetector(
                 onTap: (){
                   var hour = DateTime.now().hour;
-                  if(!(hour<=12)){
+                  if(!(hour<12)){
                     showTopSnackBar(
                       context,
                       CustomSnackBar.error(

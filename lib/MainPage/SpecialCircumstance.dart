@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class SpecialCircumstance extends StatefulWidget {
   String DeviceId;
@@ -92,6 +94,27 @@ class _SpecialCircumstanceState extends State<SpecialCircumstance> {
               onTap: (){
                 if(_tec.text == "조기입실"){
                   _tec2.text = "잠이나 자!!!!";
+                  return;
+                }
+
+                if(_tec.text == ""){
+                  showTopSnackBar(
+                    context,
+                    CustomSnackBar.error(
+                      message:
+                      "위치를 입력해주세요.",
+                    ),
+                  );
+                  return;
+                }
+                if(_tec2.text == ""){
+                  showTopSnackBar(
+                    context,
+                    CustomSnackBar.error(
+                      message:
+                      "이유를 입력해주세요.",
+                    ),
+                  );
                   return;
                 }
 
