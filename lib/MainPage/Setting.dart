@@ -12,7 +12,7 @@ class Setting extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Setting",style: GoogleFonts.quicksand(fontSize: 30,color: Colors.black),),
+        title: Text("Setting",style: TextStyle(fontSize: 30,color: Colors.black)),
         actions: [
           IconButton(
             icon:Icon(CupertinoIcons.xmark,color: Colors.black,),
@@ -30,8 +30,8 @@ class Setting extends StatelessWidget {
           ),
           ListTile(
             tileColor: Colors.grey[300],
-            leading:Icon(CupertinoIcons.news,color: Colors.black,size: 30,),
-            title:Text("사용법",style: GoogleFonts.nanumGothicCoding(fontSize: 24)),
+            leading:Icon(CupertinoIcons.book,color: Colors.black,size: 30,),
+            title:Text("사용법",style: TextStyle(fontSize: 24)),
             trailing: Icon(CupertinoIcons.right_chevron,color: Colors.black,),
             onTap: (){
               _launchURL("https://sites.google.com/view/checkingbs/%ED%99%88");
@@ -44,7 +44,7 @@ class Setting extends StatelessWidget {
           ListTile(
             tileColor: Colors.grey[300],
             leading:Icon(CupertinoIcons.tray_arrow_down,color: Colors.black,size: 30,),
-            title:Text("문제점 연락",style: GoogleFonts.nanumGothicCoding(fontSize: 24)),
+            title:Text("문제점 연락",style:TextStyle(fontSize: 24)),
             trailing: Icon(CupertinoIcons.right_chevron,color: Colors.black,),
             onTap: (){
               _launchURL("https://forms.gle/TBR7869nuakWcKxu7");

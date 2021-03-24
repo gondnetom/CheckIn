@@ -27,9 +27,9 @@ class _SignUpState extends State<SignUp> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("학번과 이름은 바꿀 수 없습니다",style: GoogleFonts.nanumGothicCoding(fontSize: 15)),
+        Text("학번과 이름은 바꿀 수 없습니다",style:TextStyle(fontSize: 15)),
         SizedBox(height: 5,),
-        Text("정확히 입력해주세요",style: GoogleFonts.nanumGothicCoding(fontSize: 15)),
+        Text("정확히 입력해주세요",style: TextStyle(fontSize: 15)),
         SizedBox(height: 10,),
         Container(
           margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
@@ -37,8 +37,6 @@ class _SignUpState extends State<SignUp> {
           decoration: BoxDecoration(
             color: Colors.grey[300],
             borderRadius: BorderRadius.all( Radius.circular(7), ),
-            boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
-              blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
           ),
           child: TextField(
             controller: _tec,
@@ -61,8 +59,6 @@ class _SignUpState extends State<SignUp> {
           decoration: BoxDecoration(
             color: Colors.grey[300],
             borderRadius: BorderRadius.all( Radius.circular(7), ),
-            boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
-              blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
           ),
           child: TextField(
             controller: _tec2,
@@ -96,7 +92,7 @@ class _SignUpState extends State<SignUp> {
               boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
                 blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
             ),
-            child: Text("가입하기",style: GoogleFonts.nanumGothicCoding(fontSize: 20,color: Colors.white)),
+            child: Text("가입하기",style: TextStyle(fontSize: 20,color: Colors.white)),
           ),
         ),
       ],

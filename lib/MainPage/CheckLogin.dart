@@ -189,7 +189,7 @@ class _CheckState extends State<Check> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${_currentPage==0 ?"Menu":"SignUp"}",style: GoogleFonts.quicksand(fontSize: 30,color: Colors.black),),
+        title: Text("${_currentPage==0 ?"Menu":"SignUp"}",style: TextStyle(fontSize: 30,color: Colors.black)),
         actions: [
           IconButton(
             icon:Icon(CupertinoIcons.settings,color: Colors.black,),

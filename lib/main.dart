@@ -9,6 +9,7 @@ void main() async{
 
   runApp(MyApp());
 }
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -28,6 +29,7 @@ class _MyAppState extends State<MyApp> {
       },
       title: 'checkschool',
       theme: ThemeData(
+        fontFamily: "SCDream4",
         appBarTheme: AppBarTheme(
           color: Colors.white,
         ),

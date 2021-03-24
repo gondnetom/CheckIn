@@ -41,18 +41,16 @@ class _SpecialCircumstanceState extends State<SpecialCircumstance> {
         body: Column(
           children: [
             SizedBox(height: 10,),
-            Text("와이파이가 없는 장소에서 활동시",style: GoogleFonts.nanumGothicCoding(fontSize: 15)),
+            Text("와이파이가 없는 장소에서 활동시",style: TextStyle(fontSize: 15)),
             SizedBox(height: 5,),
-            Text("그 장소와 이유를 적어주세요", style: GoogleFonts.nanumGothicCoding(fontSize: 15)),
+            Text("그 장소와 이유를 적어주세요", style: TextStyle(fontSize: 15)),
             SizedBox(height: 10,),
             Container(
-              margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+              margin: EdgeInsets.symmetric(vertical: 1,horizontal: 5),
               padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
               decoration: BoxDecoration(
                 color: Colors.grey[300],
-                borderRadius: BorderRadius.all( Radius.circular(7), ),
-                boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
-                  blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(7),topRight: Radius.circular(7))
               ),
               child: TextField(
                 controller: _tec,
@@ -66,15 +64,12 @@ class _SpecialCircumstanceState extends State<SpecialCircumstance> {
                 cursorColor: Colors.grey,
               ),
             ),
-            SizedBox(height: 5,),
             Container(
-              margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+              margin: EdgeInsets.symmetric(vertical: 1,horizontal: 5),
               padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
               decoration: BoxDecoration(
                 color: Colors.grey[300],
-                borderRadius: BorderRadius.all( Radius.circular(7), ),
-                boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
-                  blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
+                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(7),bottomRight: Radius.circular(7))
               ),
               child: TextField(
                 controller: _tec2,
@@ -89,7 +84,6 @@ class _SpecialCircumstanceState extends State<SpecialCircumstance> {
                 cursorColor: Colors.grey,
               ),
             ),
-            SizedBox(height: 5,),
             GestureDetector(
               onTap: (){
                 if(_tec.text == "조기입실"){

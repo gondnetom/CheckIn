@@ -173,44 +173,31 @@ class _MainPageState extends State<MainPage> {
             children: [
               //사용자 정보
               Container(
-                  margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-                  padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.all( Radius.circular(7), ),
-                    boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
-                      blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
-                  ),
-                  child: Row(
-                    children: [
-                      Text("출석체크: ",style: GoogleFonts.nanumGothicCoding(fontSize: 20)),
-                      documents["Date"]==date ?
-                      Icon(CupertinoIcons.check_mark) : Icon(CupertinoIcons.xmark),
-                      SizedBox(width: 5,),
-                      documents["Date"]==date ?
-                      Text("현재위치:${documents["NowLocation"]}",style: GoogleFonts.nanumGothicCoding(fontSize: 20))
-                      : Container(),
-                    ],
-                  )
-              ),
-              Container(
                 margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
                 padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: Colors.blue,
                   borderRadius: BorderRadius.all( Radius.circular(7), ),
-                  boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
-                    blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("현재위치: ${widget.NetworkCheck}",style: GoogleFonts.nanumGothicCoding(fontSize: 20)),
+                    Row(
+                      children: [
+                        Text("출석체크: ",style: TextStyle(fontSize: 20,color: Colors.white)),
+                        documents["Date"]==date ?
+                        Icon(CupertinoIcons.check_mark,color: Colors.white,) : Icon(CupertinoIcons.xmark,color: Colors.white,),
+                        SizedBox(width: 5,),
+                        documents["Date"]==date ?
+                        Text("현재위치:${documents["NowLocation"]}",style: TextStyle(fontSize: 20,color: Colors.white))
+                            : Container(),
+                      ],
+                    ),
                     SizedBox(height: 5,),
-                    Text("${documents["Number"]}",style: GoogleFonts.nanumGothicCoding(fontSize: 20)),
+                    Text("현재위치: ${widget.NetworkCheck}",style: TextStyle(fontSize: 20,color: Colors.white)),
                     SizedBox(height: 5,),
-                    Text("${documents["Name"]}",style: GoogleFonts.nanumGothicCoding(fontSize: 30)),
+                    Text("${documents["Number"]} ${documents["Name"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
                   ],
                 ),
               ),
@@ -240,13 +227,11 @@ class _MainPageState extends State<MainPage> {
                   decoration: BoxDecoration(
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.all( Radius.circular(7), ),
-                    boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
-                      blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("조기입실",style: GoogleFonts.nanumGothicCoding(fontSize: 30)),
+                      Text("조기입실",style:TextStyle(fontSize: 30)),
                       Icon(CupertinoIcons.check_mark)
                     ],
                   ),
@@ -257,6 +242,7 @@ class _MainPageState extends State<MainPage> {
                 onTap: (){
                   var hour = DateTime.now().hour;
                   print(hour);
+
                   if(!(hour>=18&&hour<=24)){
                     showTopSnackBar(
                       context,
@@ -291,13 +277,11 @@ class _MainPageState extends State<MainPage> {
                   decoration: BoxDecoration(
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.all( Radius.circular(7), ),
-                    boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
-                      blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("${documents["Date"] == date?"현재위치 변경":"출석하기"}",style: GoogleFonts.nanumGothicCoding(fontSize: 30)),
+                      Text("${documents["Date"] == date?"현재위치 변경":"출석하기"}",style:TextStyle(fontSize: 30)),
                       Icon(CupertinoIcons.check_mark)
                     ],
                   ),
@@ -330,13 +314,11 @@ class _MainPageState extends State<MainPage> {
                   decoration: BoxDecoration(
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.all( Radius.circular(7), ),
-                    boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
-                      blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("특별실 신청",style: GoogleFonts.nanumGothicCoding(fontSize: 30)),
+                      Text("특별실 신청",style:TextStyle(fontSize: 30)),
                       Icon(CupertinoIcons.right_chevron)
                     ],
                   ),
@@ -349,8 +331,6 @@ class _MainPageState extends State<MainPage> {
                 decoration: BoxDecoration(
                   color: Colors.grey[300],
                   borderRadius: BorderRadius.all( Radius.circular(7), ),
-                  boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
-                    blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -360,7 +340,7 @@ class _MainPageState extends State<MainPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("특별실 신청: ${documents["ApplyRoom"]}",style: GoogleFonts.nanumGothicCoding(fontSize: 20)),
+                        Text("특별실 신청: ${documents["ApplyRoom"]}",style: TextStyle(fontSize: 20)),
                         documents["BackComment"] == "" ?
                         GestureDetector(
                           onTap: (){
@@ -377,7 +357,7 @@ class _MainPageState extends State<MainPage> {
                       children: [
                         Column(
                           children: [
-                            Text("1교시",style: GoogleFonts.nanumGothicCoding(fontSize: 19)),
+                            Text("1교시",style: TextStyle(fontSize: 19)),
                             Checkbox(
                               value: ApplyTime["First"],
                             )
@@ -385,7 +365,7 @@ class _MainPageState extends State<MainPage> {
                         ),
                         Column(
                           children: [
-                            Text("2교시",style: GoogleFonts.nanumGothicCoding(fontSize: 19)),
+                            Text("2교시",style: TextStyle(fontSize: 19)),
                             Checkbox(
                               value: ApplyTime["Second"],
                             )
@@ -393,7 +373,7 @@ class _MainPageState extends State<MainPage> {
                         ),
                         Column(
                           children: [
-                            Text("3교시",style: GoogleFonts.nanumGothicCoding(fontSize: 19)),
+                            Text("3교시",style: TextStyle(fontSize: 19)),
                             Checkbox(
                               value: ApplyTime["Third"],
                             )
@@ -401,7 +381,7 @@ class _MainPageState extends State<MainPage> {
                         ),
                         Column(
                           children: [
-                            Text("4교시",style: GoogleFonts.nanumGothicCoding(fontSize: 19)),
+                            Text("4교시",style:TextStyle(fontSize: 19)),
                             Checkbox(
                               value: ApplyTime["Forth"],
                             )
@@ -410,7 +390,7 @@ class _MainPageState extends State<MainPage> {
                       ],
                     ),
                     //Reason
-                    Text("신청 이유: ${documents["ApplyComment"]}",style: GoogleFonts.nanumGothicCoding(fontSize: 20)),
+                    Text("신청 이유: ${documents["ApplyComment"]}",style: TextStyle(fontSize: 20)),
                     Divider(
                         height: 20,
                         thickness: 3,
@@ -426,12 +406,12 @@ class _MainPageState extends State<MainPage> {
                       children: [
                         CupertinoActivityIndicator(),
                         SizedBox(width: 10,),
-                        Text("승인을 대기하는 중",style: GoogleFonts.nanumGothicCoding(fontSize: 20)),
+                        Text("승인을 대기하는 중",style: TextStyle(fontSize: 20)),
                       ],
                     ) :
                     Row(
                       children: [
-                        Text("신청 결과:",style: GoogleFonts.nanumGothicCoding(fontSize: 20)),
+                        Text("신청 결과:",style: TextStyle(fontSize: 20)),
                         SizedBox(width: 10,),
                         documents["BackCheck"] ?
                         Icon(CupertinoIcons.check_mark,color: Colors.black,):
@@ -441,7 +421,7 @@ class _MainPageState extends State<MainPage> {
 
                     //Commnet
                     documents["BackComment"] != "" ?
-                    Text("의견: ${documents["BackComment"]}",style: GoogleFonts.nanumGothicCoding(fontSize: 20)):Container(),
+                    Text("의견: ${documents["BackComment"]}",style: TextStyle(fontSize: 20)):Container(),
                   ],
                 ),
               ) : Container(),

@@ -126,6 +126,7 @@ class _Put_In_ForState extends State<Put_In_For> {
 
       case "지구과학실1":
       case "지구과학실2":
+      case "천문대":
         Subject = "지구과학";
         break;
 
@@ -159,6 +160,7 @@ class _Put_In_ForState extends State<Put_In_For> {
       ),
       body: Column(
         children: [
+          SizedBox(height:10),
           GestureDetector(
             onTap: (){
               setState(() {
@@ -167,37 +169,33 @@ class _Put_In_ForState extends State<Put_In_For> {
               showPicker();
             },
             child: Container(
-              margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+              margin: EdgeInsets.symmetric(vertical: 1,horizontal: 5),
               padding: EdgeInsets.symmetric(vertical: 15,horizontal: 5),
               decoration: BoxDecoration(
                 color: Colors.grey[300],
-                borderRadius: BorderRadius.all( Radius.circular(7), ),
-                boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
-                  blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(7),topRight: Radius.circular(7))
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("${RoomName}",style: GoogleFonts.nanumGothicCoding(fontSize: 30)),
+                  Text("${RoomName}",style: TextStyle(fontSize: 30)),
                 ],
               ),
             ),
           ),
           Container(
-            margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+            margin: EdgeInsets.symmetric(vertical: 1,horizontal: 5),
             padding: EdgeInsets.fromLTRB(5, 15, 5,0),
             decoration: BoxDecoration(
               color: Colors.grey[300],
-              borderRadius: BorderRadius.all( Radius.circular(7), ),
-              boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
-                blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
+              borderRadius: BorderRadius.only()
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Column(
                   children: [
-                    Text("1교시",style: GoogleFonts.nanumGothicCoding(fontSize: 19)),
+                    Text("1교시",style: TextStyle(fontSize: 19)),
                     Checkbox(
                         value: FirstClass,
                         onChanged:(bool value){
@@ -210,7 +208,7 @@ class _Put_In_ForState extends State<Put_In_For> {
                 ),
                 Column(
                   children: [
-                    Text("2교시",style: GoogleFonts.nanumGothicCoding(fontSize: 19)),
+                    Text("2교시",style: TextStyle(fontSize: 19)),
                     Checkbox(
                         value: SecondClass,
                         onChanged:(bool value){
@@ -223,7 +221,7 @@ class _Put_In_ForState extends State<Put_In_For> {
                 ),
                 Column(
                   children: [
-                    Text("3교시",style: GoogleFonts.nanumGothicCoding(fontSize: 19)),
+                    Text("3교시",style: TextStyle(fontSize: 19)),
                     Checkbox(
                         value: ThirdClass,
                         onChanged:(bool value){
@@ -236,7 +234,7 @@ class _Put_In_ForState extends State<Put_In_For> {
                 ),
                 Column(
                   children: [
-                    Text("4교시",style: GoogleFonts.nanumGothicCoding(fontSize: 19)),
+                    Text("4교시",style: TextStyle(fontSize: 19)),
                     Checkbox(
                         value: ForthClass,
                         onChanged:(bool value){
@@ -251,13 +249,11 @@ class _Put_In_ForState extends State<Put_In_For> {
             ),
           ),
           Container(
-            margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+            margin: EdgeInsets.symmetric(vertical: 1,horizontal: 5),
             padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
             decoration: BoxDecoration(
               color: Colors.grey[300],
-              borderRadius: BorderRadius.all( Radius.circular(7), ),
-              boxShadow: [ BoxShadow( color: Colors.grey[500], offset: Offset(4.0, 4.0),
-                blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
+                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(7),bottomRight: Radius.circular(7))
             ),
             child: TextField(
               controller: _tec,
@@ -319,7 +315,7 @@ class _Put_In_ForState extends State<Put_In_For> {
                     blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
                 ),
                 child: Center(
-                  child: Text("신청하기",style: GoogleFonts.nanumGothicCoding(fontSize: 20,color: Colors.white)),
+                  child: Text("신청하기",style: TextStyle(fontSize: 20,color: Colors.white)),
                 )
             ),
           ),
