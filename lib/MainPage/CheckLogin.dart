@@ -1,15 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:google_fonts/google_fonts.dart';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wifi_info_flutter/wifi_info_flutter.dart';
-
-import 'package:platform_device_id/platform_device_id.dart';
 import 'package:location/location.dart';
 
 import 'package:checkschool/MainPage/Signup.dart';
@@ -41,6 +39,10 @@ class _CheckState extends State<Check> {
   bool first = true;
   var _currentPage = 0;
   var subscription;
+
+  String SchoolName;
+  var uid = FirebaseAuth.instance.currentUser.uid;
+
   Future CheckStates() async{
     var list = Map();
 
@@ -164,12 +166,15 @@ class _CheckState extends State<Check> {
       list["Network"] = "None";
     }
 
-    //get my id
-    list["DeviceId"] =  await PlatformDeviceId.getDeviceId;
 
     //check my id
     if(first && list["Network"] != "None"){
-      final snapShot = await FirebaseFirestore.instance.collection("Users").doc(list["DeviceId"]).get();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      SchoolName = await prefs.getString("SchoolName");
+
+      print(SchoolName);
+
+      final snapShot = await FirebaseFirestore.instance.collection("Users").doc(SchoolName).collection("Users").doc(uid).get();
       if (snapShot == null || !snapShot.exists) {
         setState(() {
           _currentPage = 1;
@@ -210,9 +215,9 @@ class _CheckState extends State<Check> {
                 return Center(child: Text("Check Network",style: TextStyle(fontSize: 20,color: Colors.black),));
               }else{
                 if(_currentPage==0)
-                  return MainPage(snapshot.data["Network"],snapshot.data["DeviceId"]);
+                  return MainPage(snapshot.data["Network"],SchoolName,uid);
                 else
-                  return SignUp(snapshot.data["DeviceId"]);
+                  return SignUp(SchoolName,uid);
               }
             }else{
               return Center(child: CupertinoActivityIndicator());

@@ -3,15 +3,15 @@ import 'package:checkschool/MainPage/SpecialCircumstance.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class MainPage extends StatefulWidget {
   String NetworkCheck;
-  String DeviceId;
+  String SchoolName;
+  String uid;
 
-  MainPage(this.NetworkCheck,this.DeviceId);
+  MainPage(this.NetworkCheck,this.SchoolName,this.uid);
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -36,7 +36,7 @@ class _MainPageState extends State<MainPage> {
     var hour = DateTime.now().hour;
     var minute = DateTime.now().minute;
 
-    await FirebaseFirestore.instance.collection("Users").doc(widget.DeviceId).
+    await FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Users").doc(widget.uid).
     update({"Date":date,"Hour":hour,"Minute":minute,"NowLocation":"조기입실","SpecialComment":""});
 
     setState(() {
@@ -47,7 +47,7 @@ class _MainPageState extends State<MainPage> {
     var hour = DateTime.now().hour;
     var minute = DateTime.now().minute;
 
-    await FirebaseFirestore.instance.collection("Users").doc(widget.DeviceId).
+    await FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Users").doc(widget.uid).
     update({"Date":date,"Hour":hour,"Minute":minute,"NowLocation":widget.NetworkCheck,"SpecialComment":""});
 
     setState(() {
@@ -141,7 +141,7 @@ class _MainPageState extends State<MainPage> {
     var hour = DateTime.now().hour;
     var minute = DateTime.now().minute;
 
-    await FirebaseFirestore.instance.collection("Users").doc(widget.DeviceId).
+    await FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Users").doc(widget.uid).
     update({"Date":date,"Hour":hour,"Minute":minute,"NowLocation":RoomName,"SpecialComment":""});
 
     setState(() {
@@ -149,7 +149,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future DeleteApply() async{
-    await FirebaseFirestore.instance.collection("Users").doc(widget.DeviceId).
+    await FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Users").doc(widget.uid).
     update({"ApplyDate":0});
 
     setState(() {
@@ -158,7 +158,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    currentStream = FirebaseFirestore.instance.collection("Users").doc(widget.DeviceId).snapshots();
+    currentStream = FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Users").doc(widget.uid).snapshots();
     var date = int.parse("${DateTime.now().year}${DateTime.now().month~/10 == 0 ? 0:""}${DateTime.now().month}${DateTime.now().day~/10 == 0 ? 0:""}${DateTime.now().day}");
 
     return StreamBuilder(
@@ -168,265 +168,269 @@ class _MainPageState extends State<MainPage> {
           var documents;
           documents = snapshot.data;
           ApplyTime = documents["ApplyTime"];
-          print("asd");
-          return ListView(
-            children: [
-              //사용자 정보
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-                padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.all( Radius.circular(7), ),
+
+          if(documents["Access"]){
+            return ListView(
+              children: [
+                //사용자 정보
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                  padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all( Radius.circular(7), ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text("출석체크: ",style: TextStyle(fontSize: 20,color: Colors.white)),
+                          documents["Date"]==date ?
+                          Icon(CupertinoIcons.check_mark,color: Colors.white,) : Icon(CupertinoIcons.xmark,color: Colors.white,),
+                          SizedBox(width: 5,),
+                          documents["Date"]==date ?
+                          Text("현재위치: ${documents["NowLocation"]}",style: TextStyle(fontSize: 20,color: Colors.white))
+                              : Container(),
+                        ],
+                      ),
+                      SizedBox(height: 5,),
+                      Text("현재위치: ${widget.NetworkCheck}",style: TextStyle(fontSize: 20,color: Colors.white)),
+                      SizedBox(height: 5,),
+                      Text("${documents["Number"]} ${documents["Name"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
+                    ],
+                  ),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text("출석체크: ",style: TextStyle(fontSize: 20,color: Colors.white)),
-                        documents["Date"]==date ?
-                        Icon(CupertinoIcons.check_mark,color: Colors.white,) : Icon(CupertinoIcons.xmark,color: Colors.white,),
-                        SizedBox(width: 5,),
-                        documents["Date"]==date ?
-                        Text("현재위치:${documents["NowLocation"]}",style: TextStyle(fontSize: 20,color: Colors.white))
-                            : Container(),
-                      ],
+
+                //CheckIn
+                documents["Date"] != date||(documents["Date"] == date && documents["NowLocation"] != "조기입실") ?
+                GestureDetector(
+                  onTap: (){
+                    var hour = DateTime.now().hour;
+                    print(hour);
+                    if(!(hour>=18&&hour<=24)){
+                      showTopSnackBar(
+                        context,
+                        CustomSnackBar.error(
+                          message:
+                          "6시 이후부터 출석할 수 있습니다!",
+                        ),
+                      );
+                      return;
+                    }
+
+                    EarlyEnter();
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                    padding: EdgeInsets.symmetric(vertical: 20,horizontal: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.all( Radius.circular(7), ),
                     ),
-                    SizedBox(height: 5,),
-                    Text("현재위치: ${widget.NetworkCheck}",style: TextStyle(fontSize: 20,color: Colors.white)),
-                    SizedBox(height: 5,),
-                    Text("${documents["Number"]} ${documents["Name"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
-                  ],
-                ),
-              ),
-
-              //CheckIn
-              documents["Date"] != date||(documents["Date"] == date && documents["NowLocation"] != "조기입실") ?
-              GestureDetector(
-                onTap: (){
-                  var hour = DateTime.now().hour;
-                  print(hour);
-                  if(!(hour>=18&&hour<=24)){
-                    showTopSnackBar(
-                      context,
-                      CustomSnackBar.error(
-                        message:
-                        "6시 이후부터 출석할 수 있습니다!",
-                      ),
-                    );
-                    return;
-                  }
-
-                  EarlyEnter();
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-                  padding: EdgeInsets.symmetric(vertical: 20,horizontal: 5),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.all( Radius.circular(7), ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("조기입실",style:TextStyle(fontSize: 30)),
-                      Icon(CupertinoIcons.check_mark)
-                    ],
-                  ),
-                ),
-              ) : Container(),
-              documents["Date"] != date||(documents["Date"] == date && documents["NowLocation"] != "조기입실")  ?
-              GestureDetector(
-                onTap: (){
-                  var hour = DateTime.now().hour;
-                  print(hour);
-
-                  if(!(hour>=18&&hour<=24)){
-                    showTopSnackBar(
-                      context,
-                      CustomSnackBar.error(
-                        message:
-                        "6시 이후부터 출석할 수 있습니다!",
-                      ),
-                    );
-                    return;
-                  }
-                  if(!ClassName.contains(widget.NetworkCheck)){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SpecialCircumstance(widget.DeviceId)),
-                    );
-                    return;
-                  }
-
-                  if(widget.NetworkCheck!= "자습실, 교실"){
-                    Check();
-                  }
-                  else{
-                    setState(() {
-                      NowRoom = "자습실";
-                    });
-                    showPicker();
-                  }
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-                  padding: EdgeInsets.symmetric(vertical: 20,horizontal: 5),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.all( Radius.circular(7), ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("${documents["Date"] == date?"현재위치 변경":"출석하기"}",style:TextStyle(fontSize: 30)),
-                      Icon(CupertinoIcons.check_mark)
-                    ],
-                  ),
-                ),
-              ) : Container(),
-
-              //특별실 신청
-              !(documents["ApplyDate"]==date) ?
-              GestureDetector(
-                onTap: (){
-                  var hour = DateTime.now().hour;
-                  if(!(hour<12)){
-                    showTopSnackBar(
-                      context,
-                      CustomSnackBar.error(
-                        message:
-                        "12시 이전까지만 신청할 수 있습니다!",
-                      ),
-                    );
-                    return;
-                  }
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Put_In_For(widget.DeviceId)),
-                  );
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-                  padding: EdgeInsets.symmetric(vertical: 20,horizontal: 5),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.all( Radius.circular(7), ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("특별실 신청",style:TextStyle(fontSize: 30)),
-                      Icon(CupertinoIcons.right_chevron)
-                    ],
-                  ),
-                ),
-              ) : Container(),
-              documents["ApplyDate"]==date ?
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-                padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.all( Radius.circular(7), ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //Room
-                    Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("특별실 신청: ${documents["ApplyRoom"]}",style: TextStyle(fontSize: 20)),
-                        documents["BackComment"] == "" ?
-                        GestureDetector(
-                          onTap: (){
-                            DeleteApply();
-                          },
-                          child: Icon(CupertinoIcons.delete,color: Colors.black,),
-                        ):Container()
+                        Text("조기입실",style:TextStyle(fontSize: 30)),
+                        Icon(CupertinoIcons.check_mark)
                       ],
                     ),
-                    SizedBox(height: 10,),
-                    //Check TIme
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Column(
-                          children: [
-                            Text("1교시",style: TextStyle(fontSize: 19)),
-                            Checkbox(
-                              value: ApplyTime["First"],
-                            )
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text("2교시",style: TextStyle(fontSize: 19)),
-                            Checkbox(
-                              value: ApplyTime["Second"],
-                            )
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text("3교시",style: TextStyle(fontSize: 19)),
-                            Checkbox(
-                              value: ApplyTime["Third"],
-                            )
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text("4교시",style:TextStyle(fontSize: 19)),
-                            Checkbox(
-                              value: ApplyTime["Forth"],
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                    //Reason
-                    Text("신청 이유: ${documents["ApplyComment"]}",style: TextStyle(fontSize: 20)),
-                    Divider(
-                        height: 20,
-                        thickness: 3,
-                        indent: 10,
-                        endIndent: 10,
-                        color: Colors.grey
-                    ),
+                  ),
+                ) : Container(),
+                documents["Date"] != date||(documents["Date"] == date && documents["NowLocation"] != "조기입실")  ?
+                GestureDetector(
+                  onTap: (){
+                    var hour = DateTime.now().hour;
+                    print(hour);
 
-                    //result
-                    documents["BackComment"] == "" ?
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    if(!(hour>=18&&hour<=24)){
+                      showTopSnackBar(
+                        context,
+                        CustomSnackBar.error(
+                          message:
+                          "6시 이후부터 출석할 수 있습니다!",
+                        ),
+                      );
+                      return;
+                    }
+                    if(!ClassName.contains(widget.NetworkCheck)){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SpecialCircumstance(widget.SchoolName,widget.uid)),
+                      );
+                      return;
+                    }
+
+                    if(widget.NetworkCheck!= "자습실, 교실"){
+                      Check();
+                    }
+                    else{
+                      setState(() {
+                        NowRoom = "자습실";
+                      });
+                      showPicker();
+                    }
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                    padding: EdgeInsets.symmetric(vertical: 20,horizontal: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.all( Radius.circular(7), ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CupertinoActivityIndicator(),
-                        SizedBox(width: 10,),
-                        Text("승인을 대기하는 중",style: TextStyle(fontSize: 20)),
-                      ],
-                    ) :
-                    Row(
-                      children: [
-                        Text("신청 결과:",style: TextStyle(fontSize: 20)),
-                        SizedBox(width: 10,),
-                        documents["BackCheck"] ?
-                        Icon(CupertinoIcons.check_mark,color: Colors.black,):
-                        Icon(CupertinoIcons.xmark,color: Colors.black,),
+                        Text("${documents["Date"] == date?"현재위치 변경":"출석하기"}",style:TextStyle(fontSize: 30)),
+                        Icon(CupertinoIcons.check_mark)
                       ],
                     ),
+                  ),
+                ) : Container(),
 
-                    //Commnet
-                    documents["BackComment"] != "" ?
-                    Text("의견: ${documents["BackComment"]}",style: TextStyle(fontSize: 20)):Container(),
-                  ],
-                ),
-              ) : Container(),
-            ],
-          );
+                //특별실 신청
+                !(documents["ApplyDate"]==date) ?
+                GestureDetector(
+                  onTap: (){
+                    var hour = DateTime.now().hour;
+                    if(!(hour<12)){
+                      showTopSnackBar(
+                        context,
+                        CustomSnackBar.error(
+                          message:
+                          "12시 이전까지만 신청할 수 있습니다!",
+                        ),
+                      );
+                      return;
+                    }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Put_In_For(widget.SchoolName,widget.uid)),
+                    );
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                    padding: EdgeInsets.symmetric(vertical: 20,horizontal: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.all( Radius.circular(7), ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("특별실 신청",style:TextStyle(fontSize: 30)),
+                        Icon(CupertinoIcons.right_chevron)
+                      ],
+                    ),
+                  ),
+                ) : Container(),
+                documents["ApplyDate"]==date ?
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                  padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.all( Radius.circular(7), ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //Room
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("특별실 신청: ${documents["ApplyRoom"]}",style: TextStyle(fontSize: 20)),
+                          documents["BackComment"] == "" ?
+                          GestureDetector(
+                            onTap: (){
+                              DeleteApply();
+                            },
+                            child: Icon(CupertinoIcons.delete,color: Colors.black,),
+                          ):Container()
+                        ],
+                      ),
+                      SizedBox(height: 10,),
+                      //Check TIme
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            children: [
+                              Text("1교시",style: TextStyle(fontSize: 19)),
+                              Checkbox(
+                                value: ApplyTime["First"],
+                              )
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text("2교시",style: TextStyle(fontSize: 19)),
+                              Checkbox(
+                                value: ApplyTime["Second"],
+                              )
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text("3교시",style: TextStyle(fontSize: 19)),
+                              Checkbox(
+                                value: ApplyTime["Third"],
+                              )
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text("4교시",style:TextStyle(fontSize: 19)),
+                              Checkbox(
+                                value: ApplyTime["Forth"],
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                      //Reason
+                      Text("신청 이유: ${documents["ApplyComment"]}",style: TextStyle(fontSize: 20)),
+                      Divider(
+                          height: 20,
+                          thickness: 3,
+                          indent: 10,
+                          endIndent: 10,
+                          color: Colors.grey
+                      ),
+
+                      //result
+                      documents["BackComment"] == "" ?
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CupertinoActivityIndicator(),
+                          SizedBox(width: 10,),
+                          Text("승인을 대기하는 중",style: TextStyle(fontSize: 20)),
+                        ],
+                      ) :
+                      Row(
+                        children: [
+                          Text("신청 결과:",style: TextStyle(fontSize: 20)),
+                          SizedBox(width: 10,),
+                          documents["BackCheck"] ?
+                          Icon(CupertinoIcons.check_mark,color: Colors.black,):
+                          Icon(CupertinoIcons.xmark,color: Colors.black,),
+                        ],
+                      ),
+
+                      //Commnet
+                      documents["BackComment"] != "" ?
+                      Text("의견: ${documents["BackComment"]}",style: TextStyle(fontSize: 20)):Container(),
+                    ],
+                  ),
+                ) : Container(),
+              ],
+            );
+          }else{
+            return Center(child: Text("승인을 대기해주세요",style: TextStyle(fontSize: 20),),);
+          }
         }else{
           return Center(child: CupertinoActivityIndicator());
         }

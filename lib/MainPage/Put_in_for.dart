@@ -6,9 +6,10 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class Put_In_For extends StatefulWidget {
-  String DeviceId;
+  String SchoolName;
+  String uid;
 
-  Put_In_For(this.DeviceId);
+  Put_In_For(this.SchoolName,this.uid);
 
   @override
   _Put_In_ForState createState() => _Put_In_ForState();
@@ -16,8 +17,8 @@ class Put_In_For extends StatefulWidget {
 class _Put_In_ForState extends State<Put_In_For> {
   String RoomName = "특별실 고르기";
 
-  List<String> DetailName = ["물리실1","물리실2","화학실1","화학실2",
-    "생명실1","생명실2","지구과학실1","지구과학실2","천문대","컴퓨터실1","컴퓨터실2"];
+  List<String> DetailName = ["물리실험실","화학실험실",
+    "생명실험실","지구과학실험실","천문대","컴퓨터실1","컴퓨터실2"];
   showPicker() {
     showModalBottomSheet(
       context: context,
@@ -75,14 +76,10 @@ class _Put_In_ForState extends State<Put_In_For> {
                   },
                   itemExtent: 32.0,
                   children: const [
-                    Text("물리실1"),
-                    Text("물리실2"),
-                    Text("화학실1"),
-                    Text("화학실2"),
-                    Text("생명실1"),
-                    Text("생명실2"),
-                    Text("지구과학실1"),
-                    Text("지구과학실2"),
+                    Text("물리실험실"),
+                    Text("화학실험실"),
+                    Text("생명실험실"),
+                    Text("지구과학실험실"),
                     Text("천문대"),
                     Text("컴퓨터실1"),
                     Text("컴퓨터실2"),
@@ -109,23 +106,19 @@ class _Put_In_ForState extends State<Put_In_For> {
     String Subject;
 
     switch(RoomName){
-      case "물리실1":
-      case "물리실2":
+      case "물리실험실":
         Subject = "물리";
         break;
 
-      case "화학실1":
-      case "화학실2":
+      case "화학실험실":
         Subject = "화학";
         break;
 
-      case "생명실1":
-      case "생명실2":
+      case "생명실험실":
         Subject = "생명";
         break;
 
-      case "지구과학실1":
-      case "지구과학실2":
+      case "지구과학실험실":
       case "천문대":
         Subject = "지구과학";
         break;
@@ -140,7 +133,7 @@ class _Put_In_ForState extends State<Put_In_For> {
         break;
     }
 
-    await FirebaseFirestore.instance.collection("Users").doc(widget.DeviceId).
+    await FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Users").doc(widget.uid).
     update({"ApplyRoom":RoomName,"ApplySubject":Subject,"ApplyDate":date,"ApplyHour":hour,"ApplyMinute":minute,
       "ApplyComment":_tec.text,"ApplyTime":{"First":FirstClass,"Second":SecondClass,"Third":ThirdClass,"Forth":FirstClass},
       "BackCheck":false,"BackComment":""});
@@ -164,7 +157,7 @@ class _Put_In_ForState extends State<Put_In_For> {
           GestureDetector(
             onTap: (){
               setState(() {
-                RoomName = "물리실1";
+                RoomName = "물리실험실";
               });
               showPicker();
             },

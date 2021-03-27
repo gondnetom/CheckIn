@@ -1,11 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class SignUp extends StatefulWidget {
-  String DeviceId;
-  SignUp(this.DeviceId);
+  String SchoolName;
+  String uid;
+
+  SignUp(this.SchoolName,this.uid);
 
   @override
   _SignUpState createState() => _SignUpState();
@@ -13,10 +18,10 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
 
   Future SignUp() async{
-    await FirebaseFirestore.instance.collection("Users").doc(widget.DeviceId).
-    set({"Name":_tec2.text.toString(),"Number":int.parse(_tec.text.toString()),"Date":0,"Hour":0,"Minute":0,"NowLocation":"","DeviceId":widget.DeviceId,
+    await FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Users").doc(widget.uid).
+    set({"Name":_tec2.text.toString(),"Number":int.parse(_tec.text.toString()),"Date":0,"Hour":0,"Minute":0,"NowLocation":"","DeviceId":widget.uid,
     "ApplyRoom":"","ApplySubject":"","ApplyDate":0,"ApplyHour":0,"ApplyMinute":0,"ApplyComment":"","ApplyTime":{},
-      "BackCheck":false,"BackComment":"","SpecialComment":""});
+      "BackCheck":false,"BackComment":"","SpecialComment":"","Access":false});
   }
 
   TextEditingController _tec = TextEditingController();
@@ -26,17 +31,18 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+
       children: [
         Text("학번과 이름은 바꿀 수 없습니다",style:TextStyle(fontSize: 15)),
         SizedBox(height: 5,),
         Text("정확히 입력해주세요",style: TextStyle(fontSize: 15)),
         SizedBox(height: 10,),
         Container(
-          margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+          margin: EdgeInsets.symmetric(vertical: 1,horizontal: 5),
           padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
           decoration: BoxDecoration(
             color: Colors.grey[300],
-            borderRadius: BorderRadius.all( Radius.circular(7), ),
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(7),topRight: Radius.circular(7))
           ),
           child: TextField(
             controller: _tec,
@@ -52,13 +58,12 @@ class _SignUpState extends State<SignUp> {
             cursorColor: Colors.grey,
           ),
         ),
-        SizedBox(height: 5,),
         Container(
-          margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+          margin: EdgeInsets.symmetric(vertical: 1,horizontal: 5),
           padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
           decoration: BoxDecoration(
             color: Colors.grey[300],
-            borderRadius: BorderRadius.all( Radius.circular(7), ),
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(7),bottomRight: Radius.circular(7))
           ),
           child: TextField(
             controller: _tec2,
@@ -76,10 +81,26 @@ class _SignUpState extends State<SignUp> {
         SizedBox(height: 10,),
         GestureDetector(
           onTap: (){
-            if(_tec.text.length ==0)
+            if(_tec.text.length ==0) {
+              showTopSnackBar(
+                context,
+                CustomSnackBar.error(
+                  message:
+                  "학번을 입력해 주세요!",
+                ),
+              );
               return;
-            if(_tec2.text.length ==0)
+            }
+            if(_tec2.text.length ==0) {
+              showTopSnackBar(
+                context,
+                CustomSnackBar.error(
+                  message:
+                  "이름을 입력해 주세요!",
+                ),
+              );
               return;
+            }
 
             SignUp();
           },

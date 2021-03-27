@@ -6,13 +6,13 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class SpecialCircumstance extends StatefulWidget {
-  String DeviceId;
-  SpecialCircumstance(this.DeviceId);
+  String SchoolName;
+  String uid;
+  SpecialCircumstance(this.SchoolName,this.uid);
 
   @override
   _SpecialCircumstanceState createState() => _SpecialCircumstanceState();
 }
-
 class _SpecialCircumstanceState extends State<SpecialCircumstance> {
   TextEditingController _tec = TextEditingController();
   TextEditingController _tec2 = TextEditingController();
@@ -22,7 +22,7 @@ class _SpecialCircumstanceState extends State<SpecialCircumstance> {
     var hour = DateTime.now().hour;
     var minute = DateTime.now().minute;
 
-    await FirebaseFirestore.instance.collection("Users").doc(widget.DeviceId).
+    await FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Users").doc(widget.uid).
     update({"Date":date,"Hour":hour,"Minute":minute,"NowLocation":_tec.text,"SpecialComment":_tec2.text});
   }
 

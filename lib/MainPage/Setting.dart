@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -35,6 +36,16 @@ class Setting extends StatelessWidget {
             trailing: Icon(CupertinoIcons.right_chevron,color: Colors.black,),
             onTap: (){
               _launchURL("https://sites.google.com/view/checkingbs/%ED%99%88");
+            },
+          ),
+          ListTile(
+            tileColor: Colors.grey[300],
+            leading:Icon(CupertinoIcons.xmark,color: Colors.black,size: 30,),
+            title:Text("로그아웃",style:TextStyle(fontSize: 24)),
+            trailing: Icon(CupertinoIcons.right_chevron,color: Colors.black,),
+            onTap: (){
+              Navigator.pop(context);
+              FirebaseAuth.instance.signOut();
             },
           ),
           Padding(

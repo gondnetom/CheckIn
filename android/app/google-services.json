@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "806192570947-6104i3qc4as4o2898ffg6l59bstnm9qe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gondnetom.checkschool",
+            "certificate_hash": "22f5cfda585d78edefad9ab092874b6370216908"
+          }
+        },
+        {
           "client_id": "806192570947-g603a2gn2hjimtkof5eta2fco99lst43.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,85 @@
             {
               "client_id": "806192570947-g603a2gn2hjimtkof5eta2fco99lst43.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "806192570947-g1jfta8spot8ruu4qo2sn49v9l1ad972.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gondnetom.checkschoolteacher"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:806192570947:android:50df88cae0379245816af6",
+        "android_client_info": {
+          "package_name": "com.gondnetom.checkschoolsagam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "806192570947-g603a2gn2hjimtkof5eta2fco99lst43.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAc_mGk7pgVWeklQnvkcKVzmWeO58N8s3g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "806192570947-g603a2gn2hjimtkof5eta2fco99lst43.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "806192570947-g1jfta8spot8ruu4qo2sn49v9l1ad972.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gondnetom.checkschoolteacher"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:806192570947:android:706aa03a3f807f8e816af6",
+        "android_client_info": {
+          "package_name": "com.gondnetom.checkschoolteacher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "806192570947-g603a2gn2hjimtkof5eta2fco99lst43.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAc_mGk7pgVWeklQnvkcKVzmWeO58N8s3g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "806192570947-g603a2gn2hjimtkof5eta2fco99lst43.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "806192570947-g1jfta8spot8ruu4qo2sn49v9l1ad972.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gondnetom.checkschoolteacher"
+              }
             }
           ]
         }
