@@ -191,7 +191,7 @@ class _MainPageState extends State<MainPage> {
                           Icon(CupertinoIcons.check_mark,color: Colors.white,) : Icon(CupertinoIcons.xmark,color: Colors.white,),
                           SizedBox(width: 5,),
                           documents["Date"]==date ?
-                          Text("현재위치: ${documents["NowLocation"]}",style: TextStyle(fontSize: 20,color: Colors.white))
+                          Text("출석위치: ${documents["NowLocation"]}",style: TextStyle(fontSize: 20,color: Colors.white))
                               : Container(),
                         ],
                       ),
@@ -204,23 +204,60 @@ class _MainPageState extends State<MainPage> {
                 ),
 
                 //CheckIn
-                documents["Date"] != date||(documents["Date"] == date && documents["NowLocation"] != "조기입실") ?
                 GestureDetector(
                   onTap: (){
                     var hour = DateTime.now().hour;
-                    print(hour);
+
                     if(!(hour>=18&&hour<=24)){
                       showTopSnackBar(
                         context,
                         CustomSnackBar.error(
                           message:
-                          "6시 이후부터 출석할 수 있습니다!",
+                          "6시 이후부터 출석할 수 있습니다.",
                         ),
                       );
                       return;
                     }
 
-                    EarlyEnter();
+                    if(documents["Date"] == date && documents["NowLocation"] == "조기입실"){
+                      showTopSnackBar(
+                        context,
+                        CustomSnackBar.error(
+                          message:
+                          "이미 조기입실 되었습니다.",
+                        ),
+                      );
+                      return;
+                    }
+
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        // return object of type Dialog
+                        return AlertDialog(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0)
+                          ),
+                          title: new Text("조기입실"),
+                          content: new Text("조기입실은 취소할 수 없습니다."),
+                          actions: <Widget>[
+                            new FlatButton(
+                              child: new Text("확인"),
+                              onPressed: () {
+                                EarlyEnter();
+                                Navigator.pop(context);
+                              },
+                            ),
+                            new FlatButton(
+                              child: new Text("취소"),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                   child: Container(
                     margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
@@ -237,27 +274,40 @@ class _MainPageState extends State<MainPage> {
                       ],
                     ),
                   ),
-                ) : Container(),
-                documents["Date"] != date||(documents["Date"] == date && documents["NowLocation"] != "조기입실")  ?
+                ),
                 GestureDetector(
                   onTap: (){
                     var hour = DateTime.now().hour;
-                    print(hour);
 
                     if(!(hour>=18&&hour<=24)){
                       showTopSnackBar(
                         context,
                         CustomSnackBar.error(
                           message:
-                          "6시 이후부터 출석할 수 있습니다!",
+                          "6시 이후부터 출석할 수 있습니다.",
                         ),
                       );
                       return;
                     }
-                    if(!ClassName.contains(widget.NetworkCheck)){
-                      Navigator.push(
+
+                    if(documents["Date"] == date && documents["NowLocation"] == "조기입실"){
+                      showTopSnackBar(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecialCircumstance(widget.SchoolName,widget.uid)),
+                        CustomSnackBar.error(
+                          message:
+                          "이미 조기입실 되었습니다.",
+                        ),
+                      );
+                      return;
+                    }
+
+                    if(!ClassName.contains(widget.NetworkCheck)){
+                      showTopSnackBar(
+                        context,
+                        CustomSnackBar.error(
+                          message:
+                          "학교 와이파이안에서 출석해주세요.",
+                        ),
                       );
                       return;
                     }
@@ -287,19 +337,66 @@ class _MainPageState extends State<MainPage> {
                       ],
                     ),
                   ),
-                ) : Container(),
+                ),
+                GestureDetector(
+                  onTap: (){
+                    var hour = DateTime.now().hour;
+
+                    if(!(hour>=18&&hour<=24)){
+                      showTopSnackBar(
+                        context,
+                        CustomSnackBar.error(
+                          message:
+                          "6시 이후부터 출석할 수 있습니다.",
+                        ),
+                      );
+                      return;
+                    }
+
+                    if(documents["Date"] == date && documents["NowLocation"] == "조기입실"){
+                      showTopSnackBar(
+                        context,
+                        CustomSnackBar.error(
+                          message:
+                          "이미 조기입실 되었습니다.",
+                        ),
+                      );
+                      return;
+                    }
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SpecialCircumstance(widget.SchoolName,widget.uid)),
+                    );
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                    padding: EdgeInsets.symmetric(vertical: 20,horizontal: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.all( Radius.circular(7), ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("특기사항",style:TextStyle(fontSize: 30)),
+                        Icon(CupertinoIcons.check_mark)
+                      ],
+                    ),
+                  ),
+                ),
 
                 //특별실 신청
                 !(documents["ApplyDate"]==date) ?
                 GestureDetector(
                   onTap: (){
                     var hour = DateTime.now().hour;
-                    if(!(hour<12)){
+                    if(!(hour<18)){
                       showTopSnackBar(
                         context,
                         CustomSnackBar.error(
                           message:
-                          "12시 이전까지만 신청할 수 있습니다!",
+                          "6시 이전까지만 신청할 수 있습니다.",
                         ),
                       );
                       return;

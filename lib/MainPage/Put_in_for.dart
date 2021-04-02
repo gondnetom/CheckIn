@@ -135,7 +135,7 @@ class _Put_In_ForState extends State<Put_In_For> {
 
     await FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Users").doc(widget.uid).
     update({"ApplyRoom":RoomName,"ApplySubject":Subject,"ApplyDate":date,"ApplyHour":hour,"ApplyMinute":minute,
-      "ApplyComment":_tec.text,"ApplyTime":{"First":FirstClass,"Second":SecondClass,"Third":ThirdClass,"Forth":FirstClass},
+      "ApplyComment":_tec.text,"ApplyTime":{"First":FirstClass,"Second":SecondClass,"Third":ThirdClass,"Forth":ForthClass},
       "BackCheck":false,"BackComment":""});
   }
 

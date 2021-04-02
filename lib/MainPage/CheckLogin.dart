@@ -41,7 +41,7 @@ class _CheckState extends State<Check> {
   var subscription;
 
   String SchoolName;
-  var uid = FirebaseAuth.instance.currentUser.uid;
+  var uid;
 
   Future CheckStates() async{
     var list = Map();
@@ -170,9 +170,13 @@ class _CheckState extends State<Check> {
     //check my id
     if(first && list["Network"] != "None"){
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      SchoolName = await prefs.getString("SchoolName");
+      SchoolName = await prefs.getString("SchoolName") ?? "";
+      uid = await FirebaseAuth.instance.currentUser.uid;
 
-      print(SchoolName);
+      if(SchoolName == ""){
+        await FirebaseAuth.instance.signOut();
+        return;
+      }
 
       final snapShot = await FirebaseFirestore.instance.collection("Users").doc(SchoolName).collection("Users").doc(uid).get();
       if (snapShot == null || !snapShot.exists) {
@@ -212,7 +216,7 @@ class _CheckState extends State<Check> {
           builder:(context,snapshot){
             if(snapshot.hasData){
               if(snapshot.data["Network"] == "None"){
-                return Center(child: Text("Check Network",style: TextStyle(fontSize: 20,color: Colors.black),));
+                return Center(child: Text("인터넷을 연결해주세요.",style: TextStyle(fontSize: 20,color: Colors.black),));
               }else{
                 if(_currentPage==0)
                   return MainPage(snapshot.data["Network"],SchoolName,uid);
