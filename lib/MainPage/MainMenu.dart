@@ -198,7 +198,7 @@ class _MainPageState extends State<MainPage> {
                       SizedBox(height: 5,),
                       Text("현재위치: ${widget.NetworkCheck}",style: TextStyle(fontSize: 20,color: Colors.white)),
                       SizedBox(height: 5,),
-                      Text("${documents["Grade"]}${documents["Class"]}${documents["Number"]} ${documents["Name"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
+                      Text("${documents["Grade"]}${documents["Class"]}${documents["Number"]~/10==0 ? "0":""}${documents["Number"]} ${documents["Name"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
                     ],
                   ),
                 ),

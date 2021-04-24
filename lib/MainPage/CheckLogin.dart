@@ -57,6 +57,7 @@ class _CheckState extends State<Check> {
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
       if (!_serviceEnabled) {
+        print("1");
         return;
       }
     }
@@ -65,7 +66,8 @@ class _CheckState extends State<Check> {
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
       if (_permissionGranted != PermissionStatus.granted) {
-        return;
+        list["Network"] = "NotLocationData";
+        return list;
       }
     }
 
@@ -166,7 +168,6 @@ class _CheckState extends State<Check> {
       list["Network"] = "None";
     }
 
-
     //check my id
     if(first && list["Network"] != "None"){
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -215,16 +216,28 @@ class _CheckState extends State<Check> {
           future: CheckStates(),
           builder:(context,snapshot){
             if(snapshot.hasData){
-              if(snapshot.data["Network"] == "None"){
-                return Center(child: Text("인터넷을 연결해주세요.",style: TextStyle(fontSize: 20,color: Colors.black),));
+
+              if(snapshot.data["Network"] != "NotLocationData"){
+
+                if(snapshot.data["Network"] != "None"){
+                  if(_currentPage==0)
+                    return MainPage(snapshot.data["Network"],SchoolName,uid);
+                  else
+                    return SignUp(SchoolName,uid);
+                }else{
+                  return Center(child: Text("인터넷을 연결해주세요.",style: TextStyle(fontSize: 20,color: Colors.black),));
+                }
+
               }else{
-                if(_currentPage==0)
-                  return MainPage(snapshot.data["Network"],SchoolName,uid);
-                else
-                  return SignUp(SchoolName,uid);
+
+                return Center(child: Text("위치정보를 허용해주세요.",style: TextStyle(fontSize: 20,color: Colors.black),));
+
               }
+
             }else{
+
               return Center(child: CupertinoActivityIndicator());
+
             }
           }
       ),

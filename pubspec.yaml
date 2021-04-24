@@ -1,7 +1,7 @@
 name: checkschool
 description: A new Flutter application.
 publish_to: 'none'
-version: 1.0.1+2
+version: 1.0.3+4
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -11,31 +11,32 @@ dependencies:
     sdk: flutter
 
   #firebase
-  firebase_auth: ^1.0.1
-  cloud_firestore: ^1.0.1
-  firebase_core: ^1.0.1
+  firebase_auth:
+  cloud_firestore:
+  firebase_core:
 
   #Google signup
-  google_sign_in: ^5.0.1
-  provider: ^5.0.0
+  apple_sign_in:
+  google_sign_in:
+  provider:
 
   # decorate
-  cupertino_icons: ^1.0.2
-  google_fonts: ^2.0.0
-  font_awesome_flutter: ^8.11.0
+  cupertino_icons:
+  google_fonts:
+  font_awesome_flutter:
 
   #Check
-  shared_preferences: ^2.0.5
-  connectivity: ^3.0.3
-  wifi_info_flutter: ^2.0.0
-  numberpicker: ^2.0.1
+  shared_preferences:
+  connectivity:
+  wifi_info_flutter:
+  numberpicker:
 
-  top_snackbar_flutter: ^1.0.0
-  modal_bottom_sheet: ^2.0.0
+  top_snackbar_flutter:
+  modal_bottom_sheet:
 
   #setting
-  url_launcher: ^6.0.2
-  location: ^4.1.1
+  url_launcher:
+  location:
 
 dev_dependencies:
   flutter_test:
