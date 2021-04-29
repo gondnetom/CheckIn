@@ -27,7 +27,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
     final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
     provider.login();
   }
-
   Future Applelogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('SchoolName', SchoolName);
@@ -83,75 +82,75 @@ class _SignUpWidgetState extends State<SignUpWidget> {
     return null;
   }
 
-  @override
-  Widget build(BuildContext context){
-
-    showPicker() {
-      showModalBottomSheet(
-          context: context,
-          builder: (BuildContext context) {
-            return Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xffffffff),
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Color(0xff999999),
-                        width: 0.0,
-                      ),
+  showPicker() {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Color(0xffffffff),
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Color(0xff999999),
+                      width: 0.0,
                     ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      CupertinoButton(
-                        child: Text('취소'),
-                        onPressed: () {
-                          setState(() {
-                            SchoolName = "학교 고르기";
-                          });
-                          Navigator.pop(context);
-                        },
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                          vertical: 5.0,
-                        ),
-                      ),
-                      CupertinoButton(
-                        child: Text('확인'),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                          vertical: 5.0,
-                        ),
-                      )
-                    ],
-                  ),
                 ),
-                Container(
-                    height: 320.0,
-                    color: Color(0xfff7f7f7),
-                    child:CupertinoPicker(
-                      backgroundColor: Colors.white,
-                      onSelectedItemChanged: (value) {
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    CupertinoButton(
+                      child: Text('취소'),
+                      onPressed: () {
                         setState(() {
-                          SchoolName = DetailName[value];
+                          SchoolName = "학교 고르기";
                         });
+                        Navigator.pop(context);
                       },
-                      itemExtent: 32.0,
-                      children: const [
-                        Text("경기북과학고등학교"),
-                      ],
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 5.0,
+                      ),
+                    ),
+                    CupertinoButton(
+                      child: Text('확인'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 5.0,
+                      ),
                     )
-                )
-              ],
-            );
-          }
-      );
-    }
+                  ],
+                ),
+              ),
+              Container(
+                  height: 320.0,
+                  color: Color(0xfff7f7f7),
+                  child:CupertinoPicker(
+                    backgroundColor: Colors.white,
+                    onSelectedItemChanged: (value) {
+                      setState(() {
+                        SchoolName = DetailName[value];
+                      });
+                    },
+                    itemExtent: 32.0,
+                    children: const [
+                      Text("경기북과학고등학교"),
+                    ],
+                  )
+              )
+            ],
+          );
+        }
+    );
+  }
+
+  @override
+  Widget build(BuildContext context){
 
     return Scaffold(
       body: Stack(
@@ -227,6 +226,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     )
                 ),
               ),
+              /*
               SizedBox(height: 5,),
               GestureDetector(
                 onTap: (){
@@ -263,6 +263,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     )
                 ),
               ),
+
+               */
             ],
           )
         ],

@@ -1,10 +1,12 @@
-import 'package:checkschool/MainPage/Put_in_for.dart';
 import 'package:checkschool/MainPage/SpecialCircumstance.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+
+import 'Setting.dart';
 
 class MainPage extends StatefulWidget {
   String NetworkCheck;
@@ -19,18 +21,11 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   Stream currentStream;
 
-  List<String> ClassName = ["자습실, 교실","물리실1","물리실2","화학실1","화학실2",
+  List<String> ClassName = ["자습실 or 교실","물리실1","물리실2","화학실1","화학실2",
     "생명실1","생명실2","지구과학실1","지구과학실2","천문대","도서실","음악실",
     "NoteStation2","컴퓨터실1","컴퓨터실2"];
 
-  String NowRoom = "자습실";
-  List<String> DetailName = ["자습실","201호실","202호실","203호실",
-    "204호실","205호실","301호실","302호실","303호실","304호실","305호실",
-    "401호실","402호실","403호실","404호실","405호실","501호실","502호실",
-    "503호실","504호실","505호실"];
-
-  var ApplyTime = Map();
-
+  //조기입실
   Future EarlyEnter() async{
     var date = int.parse("${DateTime.now().year}${DateTime.now().month~/10 == 0 ? 0:""}${DateTime.now().month}${DateTime.now().day~/10 == 0 ? 0:""}${DateTime.now().day}");
     var hour = DateTime.now().hour;
@@ -42,6 +37,16 @@ class _MainPageState extends State<MainPage> {
     setState(() {
     });
   }
+  Future EarlyEnterCancle() async{
+
+    await FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Users").doc(widget.uid).
+    update({"Date":0,});
+
+    setState(() {
+    });
+  }
+
+  //출석
   Future Check() async{
     var date = int.parse("${DateTime.now().year}${DateTime.now().month~/10 == 0 ? 0:""}${DateTime.now().month}${DateTime.now().day~/10 == 0 ? 0:""}${DateTime.now().day}");
     var hour = DateTime.now().hour;
@@ -53,101 +58,9 @@ class _MainPageState extends State<MainPage> {
     setState(() {
     });
   }
-  showPicker() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Color(0xffffffff),
-                border: Border(
-                  bottom: BorderSide(
-                    color: Color(0xff999999),
-                    width: 0.0,
-                  ),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  CupertinoButton(
-                    child: Text('취소'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 5.0,
-                    ),
-                  ),
-                  CupertinoButton(
-                    child: Text('확인'),
-                    onPressed: () {
-                      CheckDetail(NowRoom);
-                      Navigator.pop(context);
-                    },
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 5.0,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-                height: 320.0,
-                color: Color(0xfff7f7f7),
-                child:CupertinoPicker(
-                  backgroundColor: Colors.white,
-                  onSelectedItemChanged: (value) {
-                    setState(() {
-                      NowRoom= DetailName[value];
-                    });
-                  },
-                  itemExtent: 32.0,
-                  children: const [
-                    Text("자습실"),
-                    Text("201호실"),
-                    Text("202호실"),
-                    Text("203호실"),
-                    Text("204호실"),
-                    Text("205호실"),
-                    Text("301호실"),
-                    Text("302호실"),
-                    Text("303호실"),
-                    Text("304호실"),
-                    Text("305호실"),
-                    Text("401호실"),
-                    Text("402호실"),
-                    Text("403호실"),
-                    Text("404호실"),
-                    Text("405호실"),
-                    Text("501호실"),
-                    Text("502호실"),
-                    Text("503호실"),
-                    Text("504호실"),
-                    Text("505호실"),
-                  ],
-                )
-            )
-          ],
-        );
-      });
-  }
-  Future CheckDetail(String RoomName) async{
-    var date = int.parse("${DateTime.now().year}${DateTime.now().month~/10 == 0 ? 0:""}${DateTime.now().month}${DateTime.now().day~/10 == 0 ? 0:""}${DateTime.now().day}");
-    var hour = DateTime.now().hour;
-    var minute = DateTime.now().minute;
 
-    await FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Users").doc(widget.uid).
-    update({"Date":date,"Hour":hour,"Minute":minute,"NowLocation":RoomName,"SpecialComment":""});
-
-    setState(() {
-    });
-  }
-
+  //특별실 신청
+  var ApplyTime = Map();
   Future DeleteApply() async{
     await FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Users").doc(widget.uid).
     update({"ApplyDate":0});
@@ -170,223 +83,201 @@ class _MainPageState extends State<MainPage> {
           ApplyTime = documents["ApplyTime"];
 
           if(documents["Access"]){
-            return ListView(
-              children: [
-                //사용자 정보
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-                  padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.all( Radius.circular(7), ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text("출석체크: ",style: TextStyle(fontSize: 20,color: Colors.white)),
-                          documents["Date"]==date ?
-                          Icon(CupertinoIcons.check_mark,color: Colors.white,) : Icon(CupertinoIcons.xmark,color: Colors.white,),
-                          SizedBox(width: 5,),
-                          documents["Date"]==date ?
-                          Text("출석위치: ${documents["NowLocation"]}",style: TextStyle(fontSize: 20,color: Colors.white))
-                              : Container(),
-                        ],
-                      ),
-                      SizedBox(height: 5,),
-                      Text("현재위치: ${widget.NetworkCheck}",style: TextStyle(fontSize: 20,color: Colors.white)),
-                      SizedBox(height: 5,),
-                      Text("${documents["Grade"]}${documents["Class"]}${documents["Number"]~/10==0 ? "0":""}${documents["Number"]} ${documents["Name"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
-                    ],
-                  ),
-                ),
-
-                //CheckIn
-                GestureDetector(
-                  onTap: (){
-                    var hour = DateTime.now().hour;
-
-                    if(!(hour>=18&&hour<=24)){
-                      showTopSnackBar(
-                        context,
-                        CustomSnackBar.error(
-                          message:
-                          "6시 이후부터 출석할 수 있습니다.",
-                        ),
-                      );
-                      return;
-                    }
-
-                    if(documents["Date"] == date && documents["NowLocation"] == "조기입실"){
-                      showTopSnackBar(
-                        context,
-                        CustomSnackBar.error(
-                          message:
-                          "이미 조기입실 되었습니다.",
-                        ),
-                      );
-                      return;
-                    }
-
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        // return object of type Dialog
-                        return AlertDialog(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0)
-                          ),
-                          title: new Text("조기입실"),
-                          content: new Text("조기입실은 취소할 수 없습니다."),
-                          actions: <Widget>[
-                            new FlatButton(
-                              child: new Text("확인"),
-                              onPressed: () {
-                                EarlyEnter();
-                                Navigator.pop(context);
-                              },
-                            ),
-                            new FlatButton(
-                              child: new Text("취소"),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
+            return Scaffold(
+                appBar: AppBar(
+                  title: Text("Menu",style: TextStyle(fontSize: 30,color: Colors.black)),
+                  actions: [
+                    IconButton(
+                      icon:Icon(CupertinoIcons.settings,color: Colors.black,),
+                      onPressed: (){
+                        showCupertinoModalBottomSheet(
+                          context: context,
+                          builder: (context) => Setting(),
                         );
                       },
-                    );
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-                    padding: EdgeInsets.symmetric(vertical: 20,horizontal: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.all( Radius.circular(7), ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("조기입실",style:TextStyle(fontSize: 30)),
-                        Icon(CupertinoIcons.check_mark)
-                      ],
-                    ),
-                  ),
+                  ],
                 ),
-                GestureDetector(
-                  onTap: (){
-                    var hour = DateTime.now().hour;
-
-                    if(!(hour>=18&&hour<=24)){
-                      showTopSnackBar(
-                        context,
-                        CustomSnackBar.error(
-                          message:
-                          "6시 이후부터 출석할 수 있습니다.",
-                        ),
-                      );
-                      return;
-                    }
-
-                    if(documents["Date"] == date && documents["NowLocation"] == "조기입실"){
-                      showTopSnackBar(
-                        context,
-                        CustomSnackBar.error(
-                          message:
-                          "이미 조기입실 되었습니다.",
-                        ),
-                      );
-                      return;
-                    }
-
-                    if(!ClassName.contains(widget.NetworkCheck)){
-                      showTopSnackBar(
-                        context,
-                        CustomSnackBar.error(
-                          message:
-                          "학교 와이파이안에서 출석해주세요.",
-                        ),
-                      );
-                      return;
-                    }
-
-                    if(widget.NetworkCheck != "자습실, 교실"){
-                      Check();
-                    }
-                    else{
-                      setState(() {
-                        NowRoom = "자습실";
-                      });
-                      showPicker();
-                    }
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-                    padding: EdgeInsets.symmetric(vertical: 20,horizontal: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.all( Radius.circular(7), ),
+                body: ListView(
+                  children: [
+                    //사용자 정보
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                      padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.all( Radius.circular(7), ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text("출석체크: ",style: TextStyle(fontSize: 20,color: Colors.white)),
+                              documents["Date"]==date ?
+                              Icon(CupertinoIcons.check_mark,color: Colors.white,) : Icon(CupertinoIcons.xmark,color: Colors.white,),
+                              SizedBox(width: 5,),
+                              documents["Date"]==date ?
+                              Text("출석위치: ${documents["NowLocation"]}",style: TextStyle(fontSize: 20,color: Colors.white))
+                                  : Container(),
+                            ],
+                          ),
+                          SizedBox(height: 5,),
+                          Text("현재위치: ${widget.NetworkCheck}",style: TextStyle(fontSize: 20,color: Colors.white)),
+                          SizedBox(height: 5,),
+                          Text("${documents["Grade"]}${documents["Class"]}${documents["Number"]~/10==0 ? "0":""}${documents["Number"]} ${documents["Name"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("${documents["Date"] == date?"현재위치 변경":"출석하기"}",style:TextStyle(fontSize: 30)),
-                        Icon(CupertinoIcons.check_mark)
-                      ],
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: (){
-                    var hour = DateTime.now().hour;
 
-                    if(!(hour>=18&&hour<=24)){
-                      showTopSnackBar(
-                        context,
-                        CustomSnackBar.error(
-                          message:
-                          "6시 이후부터 출석할 수 있습니다.",
+                    //CheckIn
+                    //조기입실
+                    GestureDetector(
+                      onTap: (){
+                        var hour = DateTime.now().hour;
+
+                        if(!(hour>=18&&hour<=24)){
+                          showTopSnackBar(
+                            context,
+                            CustomSnackBar.error(
+                              message:
+                              "6시 이후부터 출석할 수 있습니다.",
+                            ),
+                          );
+                          return;
+                        }
+
+                        if(documents["Date"] == date && documents["NowLocation"] == "조기입실"){
+                          EarlyEnterCancle();
+                          return;
+                        }
+
+                        EarlyEnter();
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                        padding: EdgeInsets.symmetric(vertical: 20,horizontal: 5),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.all( Radius.circular(7), ),
                         ),
-                      );
-                      return;
-                    }
-
-                    if(documents["Date"] == date && documents["NowLocation"] == "조기입실"){
-                      showTopSnackBar(
-                        context,
-                        CustomSnackBar.error(
-                          message:
-                          "이미 조기입실 되었습니다.",
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("${documents["Date"] == date && documents["NowLocation"] == "조기입실" ? "조기입실 취소":"조기입실"}",style:TextStyle(fontSize: 30)),
+                            Icon(CupertinoIcons.check_mark)
+                          ],
                         ),
-                      );
-                      return;
-                    }
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SpecialCircumstance(widget.SchoolName,widget.uid)),
-                    );
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-                    padding: EdgeInsets.symmetric(vertical: 20,horizontal: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.all( Radius.circular(7), ),
+                      ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("특기사항",style:TextStyle(fontSize: 30)),
-                        Icon(CupertinoIcons.check_mark)
-                      ],
-                    ),
-                  ),
-                ),
+                    //출석
+                    GestureDetector(
+                      onTap: (){
+                        var hour = DateTime.now().hour;
 
-                //특별실 신청
+                        if(!(hour>=18&&hour<=24)){
+                          showTopSnackBar(
+                            context,
+                            CustomSnackBar.error(
+                              message:
+                              "6시 이후부터 출석할 수 있습니다.",
+                            ),
+                          );
+                          return;
+                        }
+
+                        if(documents["Date"] == date && documents["NowLocation"] == "조기입실"){
+                          showTopSnackBar(
+                            context,
+                            CustomSnackBar.error(
+                              message:
+                              "이미 조기입실 되었습니다.",
+                            ),
+                          );
+                          return;
+                        }
+
+                        if(widget.NetworkCheck == "확인불가"){
+                          showTopSnackBar(
+                            context,
+                            CustomSnackBar.error(
+                              message:
+                              "학교 와이파이안에서 출석해주세요.",
+                            ),
+                          );
+                          return;
+                        }
+
+                        Check();
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                        padding: EdgeInsets.symmetric(vertical: 20,horizontal: 5),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.all( Radius.circular(7), ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("${documents["Date"] == date?"현재위치 변경":"출석하기"}",style:TextStyle(fontSize: 30)),
+                            Icon(CupertinoIcons.check_mark)
+                          ],
+                        ),
+                      ),
+                    ),
+                    //출석 특별한 상황
+                    GestureDetector(
+                      onTap: (){
+                        var hour = DateTime.now().hour;
+
+                        if(!(hour>=18&&hour<=24)){
+                          showTopSnackBar(
+                            context,
+                            CustomSnackBar.error(
+                              message:
+                              "6시 이후부터 출석할 수 있습니다.",
+                            ),
+                          );
+                          return;
+                        }
+
+                        if(documents["Date"] == date && documents["NowLocation"] == "조기입실"){
+                          showTopSnackBar(
+                            context,
+                            CustomSnackBar.error(
+                              message:
+                              "이미 조기입실 되었습니다.",
+                            ),
+                          );
+                          return;
+                        }
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SpecialCircumstance(widget.SchoolName,widget.uid)),
+                        );
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                        padding: EdgeInsets.symmetric(vertical: 20,horizontal: 5),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.all( Radius.circular(7), ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("특기사항",style:TextStyle(fontSize: 30)),
+                            Icon(CupertinoIcons.check_mark)
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    //특별실 신청
+                    /*
                 !(documents["ApplyDate"]==date) ?
                 GestureDetector(
                   onTap: (){
@@ -523,13 +414,20 @@ class _MainPageState extends State<MainPage> {
                     ],
                   ),
                 ) : Container(),
-              ],
+
+                 */
+                  ],
+                ),
             );
           }else{
-            return Center(child: Text("승인을 대기해주세요",style: TextStyle(fontSize: 20),),);
+            return Scaffold(
+              body: Center(child: Text("승인을 대기해주세요",style: TextStyle(fontSize: 20),),),
+            );
           }
         }else{
-          return Center(child: CupertinoActivityIndicator());
+          return Scaffold(
+            body: Center(child: CupertinoActivityIndicator()),
+          );
         }
       }
     );

@@ -1,8 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'package:workmanager/workmanager.dart';
+import 'package:checkschool/main.dart';
 
 class Setting extends StatelessWidget {
   void _launchURL(String _url) async =>
@@ -28,6 +33,30 @@ class Setting extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(5),
             child: Text("앱 관련",style: TextStyle(fontSize: 19),),
+          ),
+          ListTile(
+            tileColor: Colors.grey[300],
+            leading:Icon(CupertinoIcons.arrow_2_squarepath,color: Colors.black,size: 30,),
+            title:Text("자동 설정",style:TextStyle(fontSize: 24)),
+            trailing: Icon(CupertinoIcons.right_chevron,color: Colors.black,),
+            onTap: (){
+              Workmanager().initialize(
+                  callbackDispatcher,
+                  isInDebugMode: true
+              );
+              Workmanager().registerPeriodicTask(
+                "3",
+                "Test",
+                frequency: Duration(minutes: 40),
+              );
+              showTopSnackBar(
+                context,
+                CustomSnackBar.success(
+                  message:
+                  "설정이 완료되었습니다.",
+                ),
+              );
+            },
           ),
           ListTile(
             tileColor: Colors.grey[300],

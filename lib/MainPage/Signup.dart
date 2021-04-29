@@ -52,8 +52,8 @@ class _SignUpState extends State<SignUp> {
                 Column(
                   children: [
                     Text("학년"),
-                    NumberPicker.integer(
-                      initialValue: Grade,
+                    NumberPicker(
+                      value: Grade,
                       minValue: 1,
                       maxValue: 3,
                       onChanged: (value) => setState(() => Grade = value),
@@ -63,8 +63,8 @@ class _SignUpState extends State<SignUp> {
                 Column(
                   children: [
                     Text("반"),
-                    NumberPicker.integer(
-                      initialValue: Class,
+                    NumberPicker(
+                      value: Class,
                       minValue: 1,
                       maxValue: 9,
                       onChanged: (value) => setState(() => Class = value),
@@ -74,8 +74,8 @@ class _SignUpState extends State<SignUp> {
                 Column(
                   children: [
                     Text("번호"),
-                    NumberPicker.integer(
-                      initialValue: Number,
+                    NumberPicker(
+                      value: Number,
                       minValue: 1,
                       maxValue: 99,
                       onChanged: (value) => setState(() => Number = value),
