@@ -32,9 +32,11 @@ void callbackDispatcher() {
     if(SchoolName == ""){
       return Future.value(true);
     }
+    /*
     if(!(hour>=18&&hour<=24)){
       return Future.value(true);
     }
+     */
 
     //#regioncheck wifi
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -57,7 +59,7 @@ void callbackDispatcher() {
     }
     //#endregion
     //#region check my id
-    if(WifiName != "None"){
+    if(WifiName != "None" &&  WifiName != "확인불가"){
       final snapShot = await FirebaseFirestore.instance.collection("Users").doc(SchoolName).collection("Users").doc(uid).get();
       if (snapShot == null || !snapShot.exists) {
         return Future.value(true);
@@ -119,6 +121,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
 class MyBehavior extends ScrollBehavior {
   @override
   Widget buildViewportChrome(

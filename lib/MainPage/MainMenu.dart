@@ -1,4 +1,4 @@
-import 'package:checkschool/MainPage/SpecialCircumstance.dart';
+import 'file:///C:/Users/jungseo/Documents/Android%20Studio/checkschool/lib/MainPage/PartPage/SpecialCircumstance.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +6,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
-import 'Setting.dart';
+import 'PartPage/Setting.dart';
 
 class MainPage extends StatefulWidget {
   String NetworkCheck;

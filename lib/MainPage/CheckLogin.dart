@@ -13,7 +13,7 @@ import 'package:location/location.dart';
 import 'package:checkschool/MainPage/Signup.dart';
 import 'package:checkschool/MainPage/MainMenu.dart';
 import '../SchoolWIfiName.dart';
-import 'Setting.dart';
+import 'PartPage/Setting.dart';
 
 class Check extends StatefulWidget {
   @override

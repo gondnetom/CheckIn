@@ -36,6 +36,9 @@ dependencies:
   top_snackbar_flutter: ^1.0.0
   modal_bottom_sheet: ^2.0.0
 
+  #foodlist
+  web_scraper:
+
   #setting
   url_launcher: ^6.0.3
   location: ^4.1.1
