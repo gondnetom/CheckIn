@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
+import '../main.dart';
 import 'google_sign_in.dart';
 
 
@@ -226,8 +227,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     )
                 ),
               ),
-              /*
+
               SizedBox(height: 5,),
+              isiOS ?
               GestureDetector(
                 onTap: (){
                   if(SchoolName == "학교 고르기"){
@@ -262,9 +264,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       ],
                     )
                 ),
-              ),
-
-               */
+              ):
+              SizedBox(height: 5,),
             ],
           )
         ],

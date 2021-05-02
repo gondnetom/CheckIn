@@ -1,7 +1,7 @@
 name: checkschool
 description: 기숙관리 어플리케이션
 publish_to: 'none'
-version: 1.0.3+4
+version: 1.1.1+5
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -24,6 +24,8 @@ dependencies:
   cupertino_icons:
   google_fonts:
   font_awesome_flutter:
+
+  flutter_local_notifications: ^5.0.0+3
 
   #Check
   shared_preferences: ^2.0.5

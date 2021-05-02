@@ -34,6 +34,7 @@ class Setting extends StatelessWidget {
             padding: EdgeInsets.all(5),
             child: Text("앱 관련",style: TextStyle(fontSize: 19),),
           ),
+          !isiOS ?
           ListTile(
             tileColor: Colors.grey[300],
             leading:Icon(CupertinoIcons.arrow_2_squarepath,color: Colors.black,size: 30,),
@@ -42,7 +43,6 @@ class Setting extends StatelessWidget {
             onTap: (){
               Workmanager().initialize(
                   callbackDispatcher,
-                  isInDebugMode: true
               );
               Workmanager().registerPeriodicTask(
                 "3",
@@ -57,7 +57,8 @@ class Setting extends StatelessWidget {
                 ),
               );
             },
-          ),
+          ):
+          Container(),
           ListTile(
             tileColor: Colors.grey[300],
             leading:Icon(CupertinoIcons.book,color: Colors.black,size: 30,),

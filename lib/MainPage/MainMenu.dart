@@ -1,4 +1,4 @@
-import 'file:///C:/Users/jungseo/Documents/Android%20Studio/checkschool/lib/MainPage/PartPage/SpecialCircumstance.dart';
+import 'package:checkschool/MainPage/PartPage/SpecialCircumstance.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +20,6 @@ class MainPage extends StatefulWidget {
 }
 class _MainPageState extends State<MainPage> {
   Stream currentStream;
-
-  List<String> ClassName = ["자습실 or 교실","물리실1","물리실2","화학실1","화학실2",
-    "생명실1","생명실2","지구과학실1","지구과학실2","천문대","도서실","음악실",
-    "NoteStation2","컴퓨터실1","컴퓨터실2"];
 
   //조기입실
   Future EarlyEnter() async{
