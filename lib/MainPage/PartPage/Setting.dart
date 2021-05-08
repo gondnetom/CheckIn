@@ -38,7 +38,7 @@ class Setting extends StatelessWidget {
           ListTile(
             tileColor: Colors.grey[300],
             leading:Icon(CupertinoIcons.arrow_2_squarepath,color: Colors.black,size: 30,),
-            title:Text("자동 설정",style:TextStyle(fontSize: 24)),
+            title:Text("자동 설정 DEMO",style:TextStyle(fontSize: 24)),
             trailing: Icon(CupertinoIcons.right_chevron,color: Colors.black,),
             onTap: (){
               Workmanager().initialize(
@@ -53,7 +53,7 @@ class Setting extends StatelessWidget {
                 context,
                 CustomSnackBar.success(
                   message:
-                  "설정이 완료되었습니다.",
+                  "설정이 완료되었습니다.(DEMO: 제대로 작동 안할 수도 있습니다.)",
                 ),
               );
             },

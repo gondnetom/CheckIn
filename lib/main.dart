@@ -176,7 +176,7 @@ class _MyAppState extends State<MyApp> {
             child: child,
           );
         },
-        title: 'checkschool',
+        title: 'CheckIn',
         theme: ThemeData(
           fontFamily: "SCDream4",
           appBarTheme: AppBarTheme(

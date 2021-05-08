@@ -21,6 +21,8 @@ class Check extends StatefulWidget {
   _CheckState createState() => _CheckState();
 }
 class _CheckState extends State<Check> {
+
+  //#region Check Wifi and Alert
   var subscription;
   var _flutterLocalNotificationsPlugin;
 
@@ -37,8 +39,7 @@ class _CheckState extends State<Check> {
     });
 
     //일정시간에 알
-    var initializationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = IOSInitializationSettings();
 
     var initializationSettings = InitializationSettings(android: initializationSettingsAndroid,iOS: initializationSettingsIOS);
@@ -54,7 +55,6 @@ class _CheckState extends State<Check> {
 
     subscription.cancel();
   }
-
   Future<void> _dailyAtTimeNotification() async {
     var time = Time(18, 45, 0);
     var android = AndroidNotificationDetails(
@@ -73,8 +73,9 @@ class _CheckState extends State<Check> {
       payload: 'CheckIn',
     );
   }
+  //#endregion
 
-
+  //#region Check Id
   bool first = true;
   var _currentPage = 0;
 
@@ -120,7 +121,6 @@ class _CheckState extends State<Check> {
     _locationData = await location.getLocation();
 
     //#endregion\
-
     //#regioncheck wifi
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile) {
@@ -159,6 +159,7 @@ class _CheckState extends State<Check> {
 
     return list;
   }
+  //#endregion
 
   @override
   Widget build(BuildContext context) {
@@ -183,13 +184,11 @@ class _CheckState extends State<Check> {
                   body: Center(child: Text("인터넷을 연결해주세요.",style: TextStyle(fontSize: 20,color: Colors.black),)),
                 );
               }
-
             }else{
               return Scaffold(
                 body: Center(child: Text("위치정보를 허용해주세요.",style: TextStyle(fontSize: 20,color: Colors.black),)),
               );
             }
-
           }else{
             return Scaffold(
               body: Center(child: CupertinoActivityIndicator()),

@@ -55,7 +55,7 @@ class _SignUpState extends State<SignUp> {
                     NumberPicker(
                       value: Grade,
                       minValue: 1,
-                      maxValue: 3,
+                      maxValue: 5,
                       onChanged: (value) => setState(() => Grade = value),
                     ),
                   ],
