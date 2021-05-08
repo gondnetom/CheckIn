@@ -40,7 +40,7 @@ class _An_Chat_PageState extends State<An_Chat_Page> {
         builder: (context,snapshot){
           if(snapshot.hasData){
             documents = snapshot.data.docs;
-            return Container(
+            return SafeArea(child: Container(
               child: Column(
                 children: <Widget>[
                   // 리스트뷰 추가
@@ -66,7 +66,7 @@ class _An_Chat_PageState extends State<An_Chat_Page> {
                   )
                 ],
               ),
-            );
+            ),);
           }else{
             return Center(child: CupertinoActivityIndicator());
           }

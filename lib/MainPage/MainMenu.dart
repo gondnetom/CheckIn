@@ -50,6 +50,7 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
                 child: Scaffold(
                   appBar: AppBar(
                     title: Text("CheckIn",style: TextStyle(fontSize: 30,color: Colors.black)),
+                    centerTitle: false,
                     actions: [
                       IconButton(
                         icon:Icon(CupertinoIcons.settings,color: Colors.black,),

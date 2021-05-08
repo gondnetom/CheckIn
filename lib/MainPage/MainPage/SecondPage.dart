@@ -254,7 +254,30 @@ class _SecondPageState extends State<SecondPage> with AutomaticKeepAliveClientMi
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        documents[0] == null ? Container():Container(
+                        documents[0] == null ?
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                          padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
+                          constraints: BoxConstraints(minHeight: 250,minWidth: 250),
+                          decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.all( Radius.circular(7),)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "조식",
+                                style: TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "급식 정보 없음",
+                                style: TextStyle(fontSize: 20, color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        ):
+                        Container(
                           margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
                           padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
                           constraints: BoxConstraints(minHeight: 250),
@@ -276,7 +299,30 @@ class _SecondPageState extends State<SecondPage> with AutomaticKeepAliveClientMi
                             ],
                           ),
                         ),
-                        documents[1] == null ? Container():Container(
+                        documents[1] == null ?
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                          padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
+                          constraints: BoxConstraints(minHeight: 250,minWidth: 250),
+                          decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.all( Radius.circular(7),)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "중식",
+                                style: TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "급식 정보 없음",
+                                style: TextStyle(fontSize: 20, color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        ):
+                        Container(
                           margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
                           padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
                           constraints: BoxConstraints(minHeight: 250),
@@ -298,7 +344,30 @@ class _SecondPageState extends State<SecondPage> with AutomaticKeepAliveClientMi
                             ],
                           ),
                         ),
-                        documents[2] == null ? Container():Container(
+                        documents[2] == null ?
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                          padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
+                          constraints: BoxConstraints(minHeight: 250,minWidth: 250),
+                          decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.all( Radius.circular(7),)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "석식",
+                                style: TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "급식 정보 없음",
+                                style: TextStyle(fontSize: 20, color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        ):
+                        Container(
                           margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
                           padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
                           constraints: BoxConstraints(minHeight: 250),
