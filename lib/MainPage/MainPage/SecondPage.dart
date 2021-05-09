@@ -27,17 +27,21 @@ Future getTimeTable(int Grade,int Class,String SchoolName) async {
       break;
   }
 
-
   try {
     for(int i=0; i<2;i++){
-      apiAddr =
-      "https://open.neis.go.kr/hub/hisTimetable?KEY=${apiKEY}&Type=json&ATPT_OFCDC_SC_CODE=${ATPT_OFCDC_SC_CODE}&SD_SCHUL_CODE=${SD_SCHUL_CODE}&ALL_TI_YMD=${Date+i}&GRADE=${Grade}&CLASS_NM=${Class}";
-      Addr = Uri.parse(apiAddr);
-      response = await http.get(Addr);//필요 api 호출
+      print(Date+i);
+      apiAddr = await "https://open.neis.go.kr/hub/hisTimetable?KEY=${apiKEY}&Type=json&ATPT_OFCDC_SC_CODE=${ATPT_OFCDC_SC_CODE}&SD_SCHUL_CODE=${SD_SCHUL_CODE}&ALL_TI_YMD=${Date+i}&GRADE=${Grade}&CLASS_NM=${Class}";
+      Addr = await Uri.parse(apiAddr);
+      response = await http.get(Addr);// 필요 api 호출
+
       Data = json.decode(response.body);//받은 정보를 json형태로 decode
-      //받은 데이터정보를 필요한 형태로 저장한다.
-      for(int j =0; j<Data["hisTimetable"][1]["row"].length; j++){
-        Timelist["${i==0 ? "ToDay":"Tomorrow"}${j}"] = Data["hisTimetable"][1]["row"][j]["ITRT_CNTNT"];
+
+      if(Data.containsKey("RESULT")){
+
+      }else{
+        for(int j =0; j< Data["hisTimetable"][1]["row"].length; j++){//받은 데이터정보를 필요한 형태로 저장한다.
+          Timelist["${i==0 ? "ToDay":"Tomorrow"}${j}"] = Data["hisTimetable"][1]["row"][j]["ITRT_CNTNT"];
+        }
       }
     }
   } catch (e) {

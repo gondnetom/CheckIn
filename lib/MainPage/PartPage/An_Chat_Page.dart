@@ -1,3 +1,4 @@
+import 'package:checkschool/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +16,8 @@ class An_Chat_Page extends StatefulWidget {
 class _An_Chat_PageState extends State<An_Chat_Page> {
   List<DocumentSnapshot> documents;
   Stream<QuerySnapshot> currentStream;
+
+  bool MeReport = false;
 
   // 텍스트필드 제어용 컨트롤러
   final TextEditingController _textController = TextEditingController();
@@ -51,7 +54,7 @@ class _An_Chat_PageState extends State<An_Chat_Page> {
                         reverse: true,
                         itemCount: documents.length,
                         itemBuilder: (context,index){
-                          return ChatModule(documents[index]["uid"],documents[index]["Text"]);
+                          return ChatModule(documents[index]);
                         }
                     ),
                   ),
@@ -74,45 +77,6 @@ class _An_Chat_PageState extends State<An_Chat_Page> {
         },
       )
     );
-  }
-  
-  // Chat의 모양
-  Widget ChatModule(String Textuid,String TextText){
-    if(Textuid == widget.uid){
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Container(
-            constraints: BoxConstraints(maxWidth: 280),
-            margin: EdgeInsets.symmetric(vertical: 5,horizontal: 0),
-            padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-            decoration: BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.all( Radius.circular(7),),
-            ),
-            child: Text(TextText,style: TextStyle(color: Colors.white,fontSize: 20),),
-          ),
-        ],
-      );
-    }else {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            constraints: BoxConstraints(maxWidth: 280),
-            margin: EdgeInsets.symmetric(vertical: 5,horizontal: 0),
-            padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.all( Radius.circular(7),),
-            ),
-            child: Text(TextText,style: TextStyle(color: Colors.black,fontSize: 20),),
-          ),
-        ],
-      );
-    }
   }
 
   // 사용자로부터 메시지를 입력받는 위젯 선언
@@ -160,6 +124,47 @@ class _An_Chat_PageState extends State<An_Chat_Page> {
   }
   // 메시지 전송 버튼이 클릭될 때 호출
   Future _handleSubmitted(String text) async{
+    if(MeReport){
+      if(isiOS){
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => CupertinoAlertDialog(
+              title: new Text("불쾌한 문장 신고"),
+              content: new Text("다른 사용자가 당신을 신고했습니다."),
+              actions: <Widget>[
+                CupertinoDialogAction(
+                  child: Text("확인"),
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            )
+        );
+      }
+      else{
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('불쾌한 문장 신고'),
+              content: const Text('다른 사용자가 당신을 신고했습니다.'),
+              actions: [
+                FlatButton(
+                  child: Text('확인'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+
+      return;
+    }
+
     var NowTime = DateTime.now().millisecondsSinceEpoch;
 
     // 텍스트 필드의 내용 삭제
@@ -170,6 +175,161 @@ class _An_Chat_PageState extends State<An_Chat_Page> {
     });
 
     await FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Chat").doc("${widget.uid}${NowTime}").
-    set({"NowTime":NowTime,"uid":widget.uid,"Text":text});
+    set({"NowTime":NowTime,"uid":widget.uid,"Text":text,"Report":false});
+  }
+
+  // Chat의 모양
+  Widget ChatModule(var Textdocument){
+    if(!Textdocument["Report"]){
+      if(Textdocument["uid"] == widget.uid){
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text("나"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  constraints: BoxConstraints(maxWidth: 280),
+                  margin: EdgeInsets.symmetric(vertical: 5,horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all( Radius.circular(7),),
+                  ),
+                  child: Text(Textdocument["Text"],style: TextStyle(color: Colors.white,fontSize: 20),),
+                ),
+              ],
+            )
+          ],
+        );
+      }else {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(Textdocument["uid"]),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: (){
+                    if(isiOS){
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => CupertinoAlertDialog(
+                            title: new Text("불쾌한 문장 신고"),
+                            content: new Text("신고당한 사용자는 제재를 당합니다."),
+                            actions: <Widget>[
+                              CupertinoDialogAction(
+                                child: Text("신고"),
+                                onPressed: (){
+                                  FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Chat").doc("${Textdocument.id}").
+                                  update({"Report":true});
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              CupertinoDialogAction(
+                                child: Text("취소"),
+                                onPressed: (){
+                                  Navigator.pop(context);
+                                },
+                              )
+                            ],
+                          )
+                      );
+                    }
+                    else{
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('불쾌한 문장 신고'),
+                            content: const Text('신고당한 사용자는 제재를 당합니다.'),
+                            actions: [
+                              FlatButton(
+                                child: Text('신고'),
+                                onPressed: () {
+                                  FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Chat").doc("${Textdocument.id}").
+                                  update({"Report":true});
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              FlatButton(
+                                child: Text('취소'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
+                  child:Container(
+                    constraints: BoxConstraints(maxWidth: 280),
+                    margin: EdgeInsets.symmetric(vertical: 5,horizontal: 0),
+                    padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.all( Radius.circular(7),),
+                    ),
+                    child: Text(Textdocument["Text"],style: TextStyle(color: Colors.black,fontSize: 20),),
+                  ),
+                )
+              ],
+            )
+          ],
+        );
+      }
+    }
+    else{
+      if(Textdocument["uid"] == widget.uid){
+        MeReport = true;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text("나"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  constraints: BoxConstraints(maxWidth: 280),
+                  margin: EdgeInsets.symmetric(vertical: 5,horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all( Radius.circular(7),),
+                  ),
+                  child: Text("신고됨",style: TextStyle(color: Colors.grey,fontSize: 20),),
+                ),
+              ],
+            )
+          ],
+        );
+      }else {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(Textdocument["uid"]),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  constraints: BoxConstraints(maxWidth: 280),
+                  margin: EdgeInsets.symmetric(vertical: 5,horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.all( Radius.circular(7),),
+                  ),
+                  child: Text("신고됨",style: TextStyle(color: Colors.grey,fontSize: 20),),
+                ),
+              ],
+            )
+          ],
+        );
+      }
+    }
   }
 }
