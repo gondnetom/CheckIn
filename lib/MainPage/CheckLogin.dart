@@ -74,7 +74,6 @@ class _CheckState extends State<Check> {
     );
   }
   //#endregion
-
   //#region Check Id
   bool first = true;
   var _currentPage = 0;
@@ -167,26 +166,16 @@ class _CheckState extends State<Check> {
         future: CheckStates(),
         builder:(context,snapshot){
           if(snapshot.hasData){
-            if(snapshot.data["Network"] != "NotLocationData"){
-              if(snapshot.data["Network"] != "None"){
-                if(_currentPage == 0){
-                  return MainPage(snapshot.data["Network"],SchoolName,uid);
-                }else{
-                  return Scaffold(
-                    appBar: AppBar(
-                      title: Text("Sign Up",style: TextStyle(fontSize: 30,color: Colors.black)),
-                    ),
-                    body: SignUp(SchoolName,uid),
-                  );
-                }
+            if(snapshot.data["Network"] != "None"){
+              if(_currentPage == 0){
+                return MainPage(snapshot.data["Network"],SchoolName,uid);
               }else{
-                return Scaffold(
-                  body: Center(child: Text("인터넷을 연결해주세요.",style: TextStyle(fontSize: 20,color: Colors.black),)),
-                );
+                return SignUp(SchoolName,uid);
               }
-            }else{
+            }
+            else{
               return Scaffold(
-                body: Center(child: Text("위치정보를 허용해주세요.",style: TextStyle(fontSize: 20,color: Colors.black),)),
+                body: Center(child: Text("인터넷을 연결해주세요.",style: TextStyle(fontSize: 20,color: Colors.black),)),
               );
             }
           }else{

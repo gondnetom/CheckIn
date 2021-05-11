@@ -29,6 +29,14 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
   var documents;
   Stream currentStream;
 
+  Widget CheckFirstPage(){
+    if(widget.NetworkCheck != "NotLocationData"){
+      return FirstPage(documents,widget.SchoolName,widget.uid,widget.NetworkCheck);
+    }else{
+      return Center(child: Text("위치정보를 허용해주세요.",style: TextStyle(fontSize: 20,color: Colors.black),));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     currentStream = FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Users").doc(widget.uid).snapshots();
@@ -38,13 +46,14 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
       builder:(context,snapshot){
         if(snapshot.hasData){
           documents = snapshot.data;
-
           if(documents["Access"]){
             if(documents["Grade"]==4){
               return SagamMain(widget.SchoolName);
-            }else if(documents["Grade"]==5){
+            }
+            else if(documents["Grade"]==5){
               return CheckschoolteacherMain(widget.SchoolName);
-            }else{
+            }
+            else{
               return DefaultTabController(
                 length: 3,
                 child: Scaffold(
@@ -83,7 +92,7 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
                   ),
                   body: TabBarView(
                     children: [
-                      FirstPage(documents,widget.SchoolName,widget.uid,widget.NetworkCheck),
+                      CheckFirstPage(),
                       SecondPage(documents["Grade"],documents["Class"],widget.SchoolName,widget.uid),
                       ThirdPage(widget.SchoolName, widget.uid)
                     ],
@@ -91,12 +100,14 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
                 ),
               );
             }
-          }else{
+          }
+          else{
             return Scaffold(
               body: Center(child: Text("승인을 대기해주세요",style: TextStyle(fontSize: 20),),),
             );
           }
-        }else{
+        }
+        else{
           return Scaffold(
             body: Center(child: CupertinoActivityIndicator()),
           );

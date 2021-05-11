@@ -207,7 +207,7 @@ class _An_Chat_PageState extends State<An_Chat_Page> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(Textdocument["uid"]),
+            Text(Textdocument["uid"].toString().substring(0,5)),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -311,7 +311,7 @@ class _An_Chat_PageState extends State<An_Chat_Page> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(Textdocument["uid"]),
+            Text(Textdocument["uid"].toString().substring(0,5)),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
