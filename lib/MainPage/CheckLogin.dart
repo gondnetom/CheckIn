@@ -76,9 +76,9 @@ class _CheckState extends State<Check> {
   //#endregion
   //#region Check Id
   bool first = true;
-  var _currentPage = 0;
+  int _currentPage = 0;
 
-  var uid;
+  String uid;
   String SchoolName;
   Future CheckStates() async{
     var list = Map();
@@ -93,51 +93,53 @@ class _CheckState extends State<Check> {
     }
 
     //#region Get location data
-    Location location = new Location();
+    if(_currentPage == 0){
+      Location location = new Location();
 
-    bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
-    LocationData _locationData;
+      bool _serviceEnabled;
+      PermissionStatus _permissionGranted;
+      LocationData _locationData;
 
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
+      _serviceEnabled = await location.serviceEnabled();
       if (!_serviceEnabled) {
-        print("1");
-        return;
+        _serviceEnabled = await location.requestService();
+        if (!_serviceEnabled) {
+          return;
+        }
+      }
+
+      _permissionGranted = await location.hasPermission();
+
+      if (_permissionGranted == PermissionStatus.denied) {
+        _permissionGranted = await location.requestPermission();
+        if (_permissionGranted != PermissionStatus.granted) {
+          list["Network"] = "NotLocationData";
+        }
+      }else{
+        _locationData = await location.getLocation();
       }
     }
-
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        list["Network"] = "NotLocationData";
-        return list;
-      }
-    }
-
-    _locationData = await location.getLocation();
-
     //#endregion\
     //#regioncheck wifi
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile) {
-      list["Network"] = "확인불가";
-    }
-    else if (connectivityResult == ConnectivityResult.wifi) {
-      var wifiName = await WifiInfo().getWifiName();
-      switch(SchoolName){
-        case "경기북과학고등학교":
-          list["Network"] =  GBSwifi(wifiName);
-          break;
-
-        default:
-          break;
+    if(list["Network"] != "NotLocationData"){
+      var connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.mobile) {
+        list["Network"] = "확인불가";
       }
-    }
-    else{
-      list["Network"] = "None";
+      else if (connectivityResult == ConnectivityResult.wifi) {
+        var wifiName = await WifiInfo().getWifiName();
+        switch(SchoolName){
+          case "경기북과학고등학교":
+            list["Network"] =  GBSwifi(wifiName);
+            break;
+
+          default:
+            break;
+        }
+      }
+      else{
+        list["Network"] = "None";
+      }
     }
     //#endregion
     //#region check my id
@@ -166,19 +168,21 @@ class _CheckState extends State<Check> {
         future: CheckStates(),
         builder:(context,snapshot){
           if(snapshot.hasData){
-            if(snapshot.data["Network"] != "None"){
-              if(_currentPage == 0){
-                return MainPage(snapshot.data["Network"],SchoolName,uid);
-              }else{
-                return SignUp(SchoolName,uid);
-              }
-            }
-            else{
+            if(snapshot.data["Network"] == "None"){
               return Scaffold(
                 body: Center(child: Text("인터넷을 연결해주세요.",style: TextStyle(fontSize: 20,color: Colors.black),)),
               );
             }
-          }else{
+            else{
+              if(_currentPage == 0){
+                return MainPage(snapshot.data["Network"],SchoolName,uid);
+              }
+              else{
+                return SignUp(SchoolName,uid);
+              }
+            }
+          }
+          else{
             return Scaffold(
               body: Center(child: CupertinoActivityIndicator()),
             );

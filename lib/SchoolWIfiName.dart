@@ -2,6 +2,7 @@
 String GBSwifi(var wifiName){
   switch(wifiName){
     case "gbshs":
+    case "G18_059":
       return "자습실 or 교실";
       break;
     case "LIBRARY_2.4G":
