@@ -27,7 +27,7 @@ class _An_Chat_PageState extends State<An_Chat_Page> {
   @override
   Widget build(BuildContext context) {
     currentStream = FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).
-    collection("Chat").orderBy("NowTime",descending: true).limit(100).snapshots();
+    collection("Chat").orderBy("NowTime",descending: true).limit(50).snapshots();
 
     return Scaffold(
       appBar: AppBar(
@@ -46,6 +46,16 @@ class _An_Chat_PageState extends State<An_Chat_Page> {
             return SafeArea(child: Container(
               child: Column(
                 children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                    padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.all( Radius.circular(7), ),
+                    ),
+                    child: Text("부적절한 발언을 하거나 특정 인물을 언급하는 것은 삼가 주세요. 제재를 받을 수도 있습니다.",
+                      style: TextStyle(color: Colors.white),),
+                  ),
                   // 리스트뷰 추가
                   Flexible(
                     child: ListView.builder(
@@ -203,7 +213,31 @@ class _An_Chat_PageState extends State<An_Chat_Page> {
             )
           ],
         );
-      }else {
+      }
+      else if(Textdocument["uid"] == "EfBPY6lDDRVx4LiUaUHvYcQTjl23"){
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("관리자"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  constraints: BoxConstraints(maxWidth: 280),
+                  margin: EdgeInsets.symmetric(vertical: 5,horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.all( Radius.circular(7),),
+                  ),
+                  child: Text(Textdocument["Text"],style: TextStyle(color: Colors.white,fontSize: 20),),
+                ),
+              ],
+            )
+          ],
+        );
+      }
+      else {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
