@@ -24,10 +24,12 @@ class _An_Chat_PageState extends State<An_Chat_Page> {
   // 텍스트필드에 입력된 데이터의 존재 여부
   bool _isComposing = false;
 
+  var date = int.parse("${DateTime.now().year}${DateTime.now().month~/10 == 0 ? 0:""}${DateTime.now().month}${DateTime.now().day~/10 == 0 ? 0:""}${DateTime.now().day}");
+
   @override
   Widget build(BuildContext context) {
     currentStream = FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).
-    collection("Chat").orderBy("NowTime",descending: true).limit(50).snapshots();
+    collection("Chats").doc(date.toString()).collection("Chat").orderBy("NowTime",descending: true).limit(50).snapshots();
 
     return Scaffold(
       appBar: AppBar(
@@ -184,7 +186,7 @@ class _An_Chat_PageState extends State<An_Chat_Page> {
       _isComposing = false;
     });
 
-    await FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Chat").doc("${widget.uid}${NowTime}").
+    await FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Chats").doc(date.toString()).collection("Chat").doc("${widget.uid}${NowTime}").
     set({"NowTime":NowTime,"uid":widget.uid,"Text":text,"Report":false});
   }
 
