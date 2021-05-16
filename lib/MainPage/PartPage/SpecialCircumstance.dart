@@ -128,7 +128,7 @@ class _SpecialCircumstanceState extends State<SpecialCircumstance> {
                       blurRadius: 15.0, spreadRadius: 1.0, ), BoxShadow( color: Colors.white, offset: Offset(-4.0, -4.0), blurRadius: 15.0, spreadRadius: 1.0, ), ],
                   ),
                   child: Center(
-                    child: Text("출석하기",style: GoogleFonts.nanumGothicCoding(fontSize: 20,color: Colors.white)),
+                    child: Text("출석하기",style: TextStyle(fontSize: 20,color: Colors.white)),
                   )
               ),
             ),
