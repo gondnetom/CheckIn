@@ -40,54 +40,59 @@ class _An_Chat_PageState extends State<An_Chat_Page> {
           },
         ),
       ),
-      body: StreamBuilder(
-        stream: currentStream,
-        builder: (context,snapshot){
-          if(snapshot.hasData){
-            documents = snapshot.data.docs;
-            return SafeArea(child: Container(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-                    padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.all( Radius.circular(7), ),
-                    ),
-                    child: Text("부적절한 발언을 하거나 특정 인물을 언급하는 것은 삼가 주세요. 제재를 받을 수도 있습니다.",
-                      style: TextStyle(color: Colors.white),),
-                  ),
-                  // 리스트뷰 추가
-                  Flexible(
-                    child: ListView.builder(
-                        padding: const EdgeInsets.all(8.0),
-                        // 리스트뷰의 스크롤 방향을 반대로 변경. 최신 메시지가 하단에 추가됨
-                        reverse: true,
-                        itemCount: documents.length,
-                        itemBuilder: (context,index){
-                          return ChatModule(documents[index]);
-                        }
-                    ),
-                  ),
-                  // 구분선
-                  Divider(height: 1.0),
-                  // 메시지 입력을 받은 위젯(_buildTextCompose)추가
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                    ),
-                    child: _buildTextComposer(),
-                  )
-                ],
-              ),
-            ),);
-          }else{
-            return Center(child: CupertinoActivityIndicator());
-          }
-
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
         },
-      )
+        child: StreamBuilder(
+          stream: currentStream,
+          builder: (context,snapshot){
+            if(snapshot.hasData){
+              documents = snapshot.data.docs;
+              return SafeArea(child: Container(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                      padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.all( Radius.circular(7), ),
+                      ),
+                      child: Text("부적절한 발언을 하거나 특정 인물을 언급하는 것은 삼가 주세요. 제재를 받을 수도 있습니다.",
+                        style: TextStyle(color: Colors.white),),
+                    ),
+                    // 리스트뷰 추가
+                    Flexible(
+                      child: ListView.builder(
+                          padding: const EdgeInsets.all(8.0),
+                          // 리스트뷰의 스크롤 방향을 반대로 변경. 최신 메시지가 하단에 추가됨
+                          reverse: true,
+                          itemCount: documents.length,
+                          itemBuilder: (context,index){
+                            return ChatModule(documents[index]);
+                          }
+                      ),
+                    ),
+                    // 구분선
+                    Divider(height: 1.0),
+                    // 메시지 입력을 받은 위젯(_buildTextCompose)추가
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                      ),
+                      child: _buildTextComposer(),
+                    )
+                  ],
+                ),
+              ),);
+            }else{
+              return Center(child: CupertinoActivityIndicator());
+            }
+
+          },
+        ),
+      ),
     );
   }
 
@@ -259,8 +264,6 @@ class _An_Chat_PageState extends State<An_Chat_Page> {
                               CupertinoDialogAction(
                                 child: Text("신고"),
                                 onPressed: (){
-                                  FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Chat").doc("${Textdocument.id}").
-                                  update({"Report":true});
                                   Navigator.pop(context);
                                 },
                               ),
@@ -285,8 +288,6 @@ class _An_Chat_PageState extends State<An_Chat_Page> {
                               FlatButton(
                                 child: Text('신고'),
                                 onPressed: () {
-                                  FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Chat").doc("${Textdocument.id}").
-                                  update({"Report":true});
                                   Navigator.of(context).pop();
                                 },
                               ),

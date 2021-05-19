@@ -16,10 +16,17 @@ class _ThirdPageState extends State<ThirdPage> {
   Stream<QuerySnapshot> currentStream;
   List<DocumentSnapshot> documents;
 
+  int segmentedControlGroupValue = 0;
+  final Map<int, Widget> myTabs = const <int, Widget>{
+    0: Text("1학년"),
+    1: Text("2학년"),
+    2: Text("3학년")
+  };
+
   @override
   Widget build(BuildContext context) {
     currentStream = FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Users").
-    where("Access",isEqualTo: true).where("Date",isEqualTo:date).where("NowLocation",isEqualTo: "조기입실").
+    where("Access",isEqualTo: true).where("Grade",isEqualTo: segmentedControlGroupValue+1).where("Date",isEqualTo:date).where("NowLocation",isEqualTo: "조기입실").
     orderBy("Hour",descending: true).orderBy("Minute",descending: true).snapshots();
 
     return SafeArea(
@@ -32,9 +39,25 @@ class _ThirdPageState extends State<ThirdPage> {
             if(documents.length != 0){
               return ListView.builder(
                 key: PageStorageKey("ThirdPage"),
-                itemCount: documents.length,
+                itemCount: documents.length+1,
                 itemBuilder: (context, index) {
-                  return AverageList(documents[index]);
+                  if(index -1 == -1){
+                    return Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+                      child: CupertinoSlidingSegmentedControl(
+                          groupValue: segmentedControlGroupValue,
+                          children: myTabs,
+                          onValueChanged: (i) {
+                            setState(() {
+                              segmentedControlGroupValue = i;
+                            });
+                          }
+                      ),
+                    );
+                  }else{
+                    return AverageList(documents[index-1]);
+                  }
                 },
               );
             }else{

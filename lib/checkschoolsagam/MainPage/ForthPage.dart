@@ -36,15 +36,14 @@ class _ForthPageState extends State<ForthPage> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           documents = snapshot.data.docs;
-
           return ListView.builder(
             key: PageStorageKey("ForthPage"),
-            itemCount: documents.length+1,
+            itemCount: documents.length+2,
             itemBuilder: (context, index) {
-              if(index -1 == -1){
+              if(index -2 == -2){
                 return Container(
                   width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                  margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
                   child: CupertinoSlidingSegmentedControl(
                       groupValue: segmentedControlGroupValue,
                       children: myTabs,
@@ -55,8 +54,22 @@ class _ForthPageState extends State<ForthPage> {
                       }
                   ),
                 );
-              }else{
-                return DeleteList(widget.SchoolName,documents[index-1]);
+              }
+              else if(index -2 == -1){
+                return Container(
+                    margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+                    padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.all( Radius.circular(7), ),
+                    ),
+                    child: segmentedControlGroupValue == 0 ?
+                    Text("대기인원: ${documents.length}명",style: TextStyle(fontSize: 20)):
+                    Text("현재인원: ${documents.length}명",style: TextStyle(fontSize: 20))
+                );
+              }
+              else{
+                return DeleteList(widget.SchoolName,documents[index-2]);
               }
             },
           );

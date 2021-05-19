@@ -60,31 +60,9 @@ class _SecondPageState extends State<SecondPage> with AutomaticKeepAliveClientMi
                 if(index -1 == -1){
                   return Column(
                     children: [
-                      MaterialButton(
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(0, 10,0,10),
-                            padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              borderRadius: BorderRadius.all( Radius.circular(7), ),
-                            ),
-                            child: Text("Copy",style: TextStyle(fontSize: 20)),
-                          ),
-                          onPressed: (){
-                            CopyName();
-                            showTopSnackBar(
-                              context,
-                              CustomSnackBar.success(
-                                message:
-                                "복사되었습니다.",
-                              ),
-                            );
-                          }
-                      ),
                       Container(
                           width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.fromLTRB(10,0,10,10),
+                          margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
                           child:CupertinoSlidingSegmentedControl(
                               groupValue: segmentedControlGroupValue,
                               children: myTabs,
@@ -95,6 +73,28 @@ class _SecondPageState extends State<SecondPage> with AutomaticKeepAliveClientMi
                               }
                           ),
                       ),
+                      GestureDetector(
+                        child: Container(
+                          margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+                          padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.all( Radius.circular(7), ),
+                          ),
+                          child: Text("Copy",style: TextStyle(fontSize: 20)),
+                        ),
+                        onTap: (){
+                          CopyName();
+                          showTopSnackBar(
+                            context,
+                            CustomSnackBar.success(
+                              message:
+                              "복사되었습니다.",
+                            ),
+                          );
+                        },
+                      )
                     ],
                   );
                 }else{

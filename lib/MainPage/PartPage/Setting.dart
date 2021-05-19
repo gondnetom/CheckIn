@@ -34,31 +34,6 @@ class Setting extends StatelessWidget {
             padding: EdgeInsets.all(5),
             child: Text("앱 관련",style: TextStyle(fontSize: 19),),
           ),
-          !isiOS ?
-          ListTile(
-            tileColor: Colors.grey[300],
-            leading:Icon(CupertinoIcons.arrow_2_squarepath,color: Colors.black,size: 30,),
-            title:Text("자동 설정 DEMO",style:TextStyle(fontSize: 24)),
-            trailing: Icon(CupertinoIcons.right_chevron,color: Colors.black,),
-            onTap: (){
-              Workmanager().initialize(
-                  callbackDispatcher,
-              );
-              Workmanager().registerPeriodicTask(
-                "3",
-                "Test",
-                frequency: Duration(minutes: 40),
-              );
-              showTopSnackBar(
-                context,
-                CustomSnackBar.success(
-                  message:
-                  "설정이 완료되었습니다.(DEMO: 제대로 작동 안할 수도 있습니다.)",
-                ),
-              );
-            },
-          ):
-          Container(),
           ListTile(
             tileColor: Colors.grey[300],
             leading:Icon(CupertinoIcons.book,color: Colors.black,size: 30,),

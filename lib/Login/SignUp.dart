@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:apple_sign_in/apple_sign_in.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
@@ -44,55 +45,14 @@ class _SignUpWidgetState extends State<SignUpWidget> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('SchoolName', SchoolName);
 
-    // 애플 로그인은 IOS 13부터 지원한다
-    bool isAvailable = await AppleSignIn.isAvailable();
-    if (!isAvailable) {
-      return null;
-    }
+    var credential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
 
-    AuthorizationResult result;
-
-    // 로그인 요청
-    try {
-      result = await AppleSignIn.performRequests([
-        AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
-      ]);
-    } catch (e) {
-      print(e);
-      return null;
-    }
-
-    switch (result.status) {
-    // 성공
-      case AuthorizationStatus.authorized:
-        final oAuthProvider = OAuthProvider('apple.com');
-        final oAuthCredential = oAuthProvider.credential(
-          idToken: String.fromCharCodes(result.credential.identityToken),
-          accessToken:
-          String.fromCharCodes(result.credential.authorizationCode),
-        );
-
-        // 파이어베이스 인증
-        try {
-          UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(oAuthCredential);
-          return userCredential;
-        } catch (e) {
-          return null;
-        }
-        break;
-
-    // 에러
-      case AuthorizationStatus.error:
-        print("Sign in failed: ${result.error.localizedDescription}");
-        break;
-
-    // 유저가 취소한 경우
-      case AuthorizationStatus.cancelled:
-        print('User cancelled');
-        break;
-    }
-    return null;
+    await FirebaseAuth.instance.signInWithCustomToken(credential.identityToken);
   }
 
   showPicker() {

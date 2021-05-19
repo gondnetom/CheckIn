@@ -29,17 +29,15 @@ class _CheckState extends State<Check> {
   @override
   initState() {
     super.initState();
-
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       // Got a new connectivity status!
       setState(() {
-        print("asd");
         callbackDispatcherWifi();
       });
     });
 
     //일정시간에 알
-    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
     var initializationSettingsIOS = IOSInitializationSettings();
 
     var initializationSettings = InitializationSettings(android: initializationSettingsAndroid,iOS: initializationSettingsIOS);
@@ -56,7 +54,7 @@ class _CheckState extends State<Check> {
     subscription.cancel();
   }
   Future<void> _dailyAtTimeNotification() async {
-    var time = Time(18, 45, 0);
+    var time = Time(21, 53, 0);
     var android = AndroidNotificationDetails(
         'your channel id', 'your channel name', 'your channel description',
         importance: Importance.max, priority: Priority.high);

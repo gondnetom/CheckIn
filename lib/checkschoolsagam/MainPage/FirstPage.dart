@@ -23,15 +23,26 @@ class _FirstPageState extends State<FirstPage> with AutomaticKeepAliveClientMixi
     2: Text("3학년")
   };
 
+  int segmentedControlGroupValueban = 0;
+  final Map<int, Widget> myTabsGBS = const <int, Widget>{
+    0: Text("1"),
+    1: Text("2"),
+    2: Text("3"),
+    3: Text("4"),
+    4: Text("5")
+  };
+
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
     currentStream = FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Users").
-    where("Access",isEqualTo: true).where("Grade",isEqualTo: segmentedControlGroupValue+1).
+    where("Access",isEqualTo: true).
+    where("Grade",isEqualTo: segmentedControlGroupValue+1).
+    where("Class",isEqualTo: segmentedControlGroupValueban+1).
     where("Date",isEqualTo:date).
-    orderBy("Class").orderBy("Number").
+    orderBy("Number").
     snapshots();
 
     return SafeArea(
@@ -41,12 +52,12 @@ class _FirstPageState extends State<FirstPage> with AutomaticKeepAliveClientMixi
             if (snapshot.hasData) {
               documents = snapshot.data.docs;
               return ListView.builder(
-                itemCount: documents.length+1,
+                itemCount: documents.length+2,
                 itemBuilder: (context, index) {
-                  if(index -1 == -1){
+                  if(index -2 == -2){
                     return Container(
                       width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                      margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
                       child: CupertinoSlidingSegmentedControl(
                           groupValue: segmentedControlGroupValue,
                           children: myTabs,
@@ -57,8 +68,30 @@ class _FirstPageState extends State<FirstPage> with AutomaticKeepAliveClientMixi
                           }
                       ),
                     );
-                  }else{
-                    return AverageList(documents[index-1]);
+                  }
+                  else if(index -2 == -1){
+                    switch(widget.SchoolName){
+                      case "경기북과학고등학교":
+                        return Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+                          child: CupertinoSlidingSegmentedControl(
+                              groupValue: segmentedControlGroupValueban,
+                              children: myTabsGBS,
+                              onValueChanged: (i) {
+                                setState(() {
+                                  segmentedControlGroupValueban = i;
+                                });
+                              }
+                          ),
+                        );
+                      default:
+                        return Container();
+                        break;
+                    }
+                  }
+                  else{
+                    return AverageList(documents[index-2]);
                   }
                 },
               );
