@@ -107,7 +107,7 @@ class _DetailBaordState extends State<DetailBaord> {
                     children: [
                       //title
                       Text("${widget.documents["Title"]}",style: TextStyle(color: Colors.black,fontSize: 30),),
-                      Text("${widget.documents["Uid"].toString().substring(0,5)}  ${widget.documents["Time"]}",style: TextStyle(color: Colors.black,fontSize: 10),),
+                      Text("${widget.documents["Uid"]==widget.uid ? "나":widget.documents["Uid"].toString().substring(0,5)}  ${widget.documents["Time"]}",style: TextStyle(color: Colors.black,fontSize: 10),),
                       Divider(
                         color: Color(0xff4d4d4d),
                         height: 10,
@@ -120,10 +120,9 @@ class _DetailBaordState extends State<DetailBaord> {
                         child: Container(
                           height: 300,
                           decoration: BoxDecoration(
-                            image: widget.documents["Image"] != "" ? DecorationImage(image: NetworkImage(widget.documents["Image"]), fit: BoxFit.cover) :
-                            DecorationImage(image: AssetImage("AppImage/AppImage/NoImage.jpg"), fit: BoxFit.cover),
                             color:Colors.grey.shade300,
                           ),
+                          child: Image.network(widget.documents["Image"],fit: BoxFit.cover,),
                         ),
                       ):
                       Container(),
@@ -209,7 +208,7 @@ class _DetailBaordState extends State<DetailBaord> {
                         height: 10,
                       ),
 
-                      Text("댓글 ${documents.length}개",style: TextStyle(color: Colors.black,fontSize: 20),),
+                      Text("댓글 ${documents.length}개",style: TextStyle(color: Colors.black,fontSize: 15),),
                     ],
                   ),
                 );

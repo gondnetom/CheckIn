@@ -45,14 +45,40 @@ class _SignUpWidgetState extends State<SignUpWidget> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('SchoolName', SchoolName);
 
-    var credential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-    );
+    try {
+      // Request credential for the currently signed in Apple account.
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
 
-    await FirebaseAuth.instance.signInWithCustomToken(credential.identityToken);
+      print(appleCredential.authorizationCode);
+
+      // Create an `OAuthCredential` from the credential returned by Apple.
+      final oauthCredential = OAuthProvider("apple.com").credential(
+        idToken: appleCredential.identityToken,
+      );
+
+      // Sign in the user with Firebase. If the nonce we generated earlier does
+      // not match the nonce in `appleCredential.identityToken`, sign in will fail.
+      final authResult =
+      await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+
+      final displayName =
+          '${appleCredential.givenName} ${appleCredential.familyName}';
+      final userEmail = '${appleCredential.email}';
+
+      final firebaseUser = authResult.user;
+      print(displayName);
+      await firebaseUser.updateProfile(displayName: displayName);
+      await firebaseUser.updateEmail(userEmail);
+
+      return firebaseUser;
+    } catch (exception) {
+      print(exception);
+    }
   }
 
   showPicker() {

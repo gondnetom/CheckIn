@@ -1,7 +1,7 @@
 name: checkschool
 description: 기숙관리 어플리케이션
 publish_to: 'none'
-version: 1.3.2+12
+version: 2.1.0+14
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

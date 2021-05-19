@@ -148,110 +148,122 @@ class _UploadPostState extends State<UploadPost> {
         },
         child: SafeArea(
             child:  SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    SizedBox(height: 1,),
-                    GestureDetector(
-                        onTap: (){
-                          if(wait)
-                            return;
+              child: Table(
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                columnWidths: {0: FractionColumnWidth(.3), 1: FractionColumnWidth(.7)},
+                children: [
+                  TableRow(
+                      children:[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(5, 5, 0, 5),
+                          child: GestureDetector(
+                              onTap: (){
+                                if(wait)
+                                  return;
 
-                          FocusScope.of(context).requestFocus(new FocusNode());
-                          if(isiOS){
-                            showCupertinoModalPopup(
-                              context: context,
-                              builder: (BuildContext context) => CupertinoActionSheet(
-                                  actions: <Widget>[
-                                    CupertinoActionSheetAction(
-                                      child: const Text('사진 가져오기'),
-                                      onPressed: () {
+                                FocusScope.of(context).requestFocus(new FocusNode());
+                                if(isiOS){
+                                  showCupertinoModalPopup(
+                                    context: context,
+                                    builder: (BuildContext context) => CupertinoActionSheet(
+                                        actions: <Widget>[
+                                          CupertinoActionSheetAction(
+                                            child: const Text('사진 가져오기'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              getImage(ImageSource.gallery);
+                                            },
+                                          ),
+                                          CupertinoActionSheetAction(
+                                            child: const Text('사진 찍기'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              getImage(ImageSource.camera);
+                                            },
+                                          )
+                                        ],
+                                        cancelButton: CupertinoActionSheetAction(
+                                          child: const Text('취소'),
+                                          isDefaultAction: true,
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        )),
+                                  );
+                                }
+                                else{
+                                  showAdaptiveActionSheet(
+                                    context: context,
+                                    actions: <BottomSheetAction>[
+                                      BottomSheetAction(title: '사진 가져오기', onPressed: () {
                                         Navigator.pop(context);
                                         getImage(ImageSource.gallery);
-                                      },
-                                    ),
-                                    CupertinoActionSheetAction(
-                                      child: const Text('사진 찍기'),
-                                      onPressed: () {
+                                      }),
+                                      BottomSheetAction(title: '사진 찍기', onPressed: () {
                                         Navigator.pop(context);
                                         getImage(ImageSource.camera);
-                                      },
+                                      }),
+                                    ],
+                                    cancelAction: CancelAction(title: '취소'),// onPressed parameter is optional by default will dismiss the ActionSheet
+                                  );
+                                }
+                              },
+                              child: AspectRatio(
+                                aspectRatio: 1,
+                                child: Container(
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                    image: PostImage != null ? DecorationImage( image: FileImage(File(PostImage.path)), fit: BoxFit.cover) : null,
+                                    color: Colors.grey.shade300,
+                                    borderRadius: BorderRadius.all(const Radius.circular(5))
+                                  ),
+                                  child: PostImage != null ? Container():Center(child: Icon(CupertinoIcons.paperclip,color: Colors.grey,),),
+                                ),
+                              )
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              CupertinoTextField(
+                                controller: Topic_textController,
+                                keyboardType: TextInputType.multiline,
+                                maxLength: 20,
+                                maxLines: 1,
+                                placeholder: "제목",
+                                decoration: BoxDecoration(
+                                    color: Colors.grey.shade300,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: const Radius.circular(5),
+                                      topRight: const Radius.circular(5),
                                     )
-                                  ],
-                                  cancelButton: CupertinoActionSheetAction(
-                                    child: const Text('취소'),
-                                    isDefaultAction: true,
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  )),
-                            );
-                          }
-                          else{
-                            showAdaptiveActionSheet(
-                              context: context,
-                              actions: <BottomSheetAction>[
-                                BottomSheetAction(title: '사진 가져오기', onPressed: () {
-                                  Navigator.pop(context);
-                                  getImage(ImageSource.gallery);
-                                }),
-                                BottomSheetAction(title: '사진 찍기', onPressed: () {
-                                  Navigator.pop(context);
-                                  getImage(ImageSource.camera);
-                                }),
-                              ],
-                              cancelAction: CancelAction(title: '취소'),// onPressed parameter is optional by default will dismiss the ActionSheet
-                            );
-                          }
-                        },
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: Container(
-                            height: 200,
-                            decoration: BoxDecoration(
-                                image: PostImage != null ? DecorationImage( image: FileImage(File(PostImage.path)), fit: BoxFit.cover) : null,
-                                color: Colors.grey.shade300,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: const Radius.circular(5),
-                                  topRight: const Radius.circular(5),
-                                )
-                            ),
-                            child: PostImage != null ? Container():Center(child: Icon(Icons.add,color: Colors.grey,),),
+                                ),
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              SizedBox(height: 1,),
+                              CupertinoTextField(
+                                controller: Text_textController,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: 4,
+                                maxLength: 100,
+                                placeholder: "내용",
+                                decoration: BoxDecoration(
+                                    color: Colors.grey.shade300,
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: const Radius.circular(5),
+                                      bottomRight: const Radius.circular(5),
+                                    )
+                                ),
+                                style: TextStyle(fontSize: 18,),
+                              ),
+                            ],
                           ),
                         )
-                    ),
-                    SizedBox(height: 1,),
-                    CupertinoTextField(
-                      controller: Topic_textController,
-                      keyboardType: TextInputType.multiline,
-                      maxLength: 20,
-                      maxLines: 1,
-                      placeholder: "제목",
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                      ),
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    SizedBox(height: 1,),
-                    CupertinoTextField(
-                      controller: Text_textController,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: 4,
-                      maxLength: 100,
-                      placeholder: "내용",
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: const Radius.circular(5),
-                            bottomRight: const Radius.circular(5),
-                          )
-                      ),
-                      style: TextStyle(fontSize: 18,),
-                    ),
-                  ],
-                ),
+                      ]
+                  )
+                ],
               )
             )
         ),
