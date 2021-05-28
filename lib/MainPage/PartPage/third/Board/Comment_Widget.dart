@@ -90,7 +90,7 @@ class _Comment_WidgetState extends State<Comment_Widget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("${widget.documents["Text"]}",style: TextStyle(color: Colors.black,fontSize: 25),),
+            Text("${widget.documents["Text"]}",style: TextStyle(color: Colors.black,fontSize: 20),),
             Text("${widget.documents["Uid"]==widget.uid ? "나":widget.documents["Uid"].toString().substring(0,5)}  ${widget.documents["Time"]}",style: TextStyle(color: Colors.black,fontSize: 10),),
           ],
         ),

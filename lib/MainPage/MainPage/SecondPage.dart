@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 Future getTimeTable(int Grade,int Class,String SchoolName) async {
   Map<String, dynamic> Data;
   var Timelist = Map();
+  Timelist["ToDay"] = "";
+  Timelist["Tomorrow"] = "";
 
   //api 호출을 위한 주소
   Uri Addr;
@@ -40,7 +42,7 @@ Future getTimeTable(int Grade,int Class,String SchoolName) async {
 
       }else{
         for(int j =0; j< Data["hisTimetable"][1]["row"].length; j++){//받은 데이터정보를 필요한 형태로 저장한다.
-          Timelist["${i==0 ? "ToDay":"Tomorrow"}${j}"] = Data["hisTimetable"][1]["row"][j]["ITRT_CNTNT"];
+          Timelist["${i==0 ? "ToDay":"Tomorrow"}"] += "${j+1}. "+Data["hisTimetable"][1]["row"][j]["ITRT_CNTNT"] + "\n";
         }
       }
     }
@@ -82,9 +84,12 @@ Future getFoodList(int Grade,int Class,String SchoolName) async {
       response = await http.get(Addr);//필요 api 호출
       Data = json.decode(response.body);//받은 정보를 json형태로 decode
       //받은 데이터정보를 필요한 형태로 저장한다.
-      Timelist[0] = Data["mealServiceDietInfo"][1]["row"][0]["DDISH_NM"].toString().replaceAll("<br/>","\n");
-      Timelist[1] = Data["mealServiceDietInfo"][1]["row"][1]["DDISH_NM"].toString().replaceAll("<br/>","\n");
-      Timelist[2] = Data["mealServiceDietInfo"][1]["row"][2]["DDISH_NM"].toString().replaceAll("<br/>","\n");
+      Timelist[0] = Data["mealServiceDietInfo"][1]["row"][0]["DDISH_NM"].toString().
+      replaceAll("<br/>","\n").replaceAll("*","").replaceAll("\$","").replaceAll(".","").replaceAll(RegExp(r'[0-9]'),"");
+      Timelist[1] = Data["mealServiceDietInfo"][1]["row"][1]["DDISH_NM"].toString().
+      replaceAll("<br/>","\n").replaceAll("*","").replaceAll("\$","").replaceAll(".","").replaceAll(RegExp(r'[0-9]'),"");
+      Timelist[2] = Data["mealServiceDietInfo"][1]["row"][2]["DDISH_NM"].toString().
+      replaceAll("<br/>","\n").replaceAll("*","").replaceAll("\$","").replaceAll(".","").replaceAll(RegExp(r'[0-9]'),"");
     }
   } catch (e) {
     print(e);
@@ -125,6 +130,7 @@ class _SecondPageState extends State<SecondPage> with AutomaticKeepAliveClientMi
                   Expanded(child: Container(
                     margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
                     padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
+                    constraints: BoxConstraints(minHeight: 250,minWidth: 250),
                     decoration: BoxDecoration(
                       color: Colors.blue,
                       borderRadius: BorderRadius.all( Radius.circular(7), ),
@@ -136,26 +142,15 @@ class _SecondPageState extends State<SecondPage> with AutomaticKeepAliveClientMi
                         SizedBox(
                           height: 10,
                         ),
-                        documents["ToDay0"] == null ? Text("",style: TextStyle(fontSize: 20,color: Colors.white)):
-                        Text("1.${documents["ToDay0"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
-                        documents["ToDay1"] == null ? Text("",style: TextStyle(fontSize: 20,color: Colors.white)):
-                        Text("2.${documents["ToDay1"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
-                        documents["ToDay2"] == null ? Text("",style: TextStyle(fontSize: 20,color: Colors.white)):
-                        Text("3.${documents["ToDay2"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
-                        documents["ToDay3"] == null ? Text("",style: TextStyle(fontSize: 20,color: Colors.white)):
-                        Text("4.${documents["ToDay3"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
-                        documents["ToDay4"] == null ? Text("",style: TextStyle(fontSize: 20,color: Colors.white)):
-                        Text("5.${documents["ToDay4"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
-                        documents["ToDay5"] == null ? Text("",style: TextStyle(fontSize: 20,color: Colors.white)):
-                        Text("6.${documents["ToDay5"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
-                        documents["ToDay6"] == null ? Text("",style: TextStyle(fontSize: 20,color: Colors.white)):
-                        Text("7.${documents["ToDay6"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
+                        documents["ToDay"] == null ? Text("시간표 정보 없음",style: TextStyle(fontSize: 20,color: Colors.white)):
+                        Text("${documents["ToDay"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
                       ],
                     ),
                   ),),
                   Expanded(child: Container(
                     margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
                     padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
+                    constraints: BoxConstraints(minHeight: 250,minWidth: 250),
                     decoration: BoxDecoration(
                       color: Colors.blue,
                       borderRadius: BorderRadius.all( Radius.circular(7), ),
@@ -167,20 +162,8 @@ class _SecondPageState extends State<SecondPage> with AutomaticKeepAliveClientMi
                         SizedBox(
                           height: 10,
                         ),
-                        documents["Tomorrow0"] == null ? Text("",style: TextStyle(fontSize: 20,color: Colors.white)):
-                        Text("1.${documents["Tomorrow0"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
-                        documents["Tomorrow1"] == null ? Text("",style: TextStyle(fontSize: 20,color: Colors.white)):
-                        Text("2.${documents["Tomorrow1"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
-                        documents["Tomorrow2"] == null ? Text("",style: TextStyle(fontSize: 20,color: Colors.white)):
-                        Text("3.${documents["Tomorrow2"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
-                        documents["Tomorrow3"] == null ? Text("",style: TextStyle(fontSize: 20,color: Colors.white)):
-                        Text("4.${documents["Tomorrow3"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
-                        documents["Tomorrow4"] == null ? Text("",style: TextStyle(fontSize: 20,color: Colors.white)):
-                        Text("5.${documents["Tomorrow4"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
-                        documents["Tomorrow5"] == null ? Text("",style: TextStyle(fontSize: 20,color: Colors.white)):
-                        Text("6.${documents["Tomorrow5"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
-                        documents["Tomorrow6"] == null ? Text("",style: TextStyle(fontSize: 20,color: Colors.white)):
-                        Text("7.${documents["Tomorrow6"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
+                        documents["Tomorrow"] == null ? Text("시간표 정보 없음",style: TextStyle(fontSize: 20,color: Colors.white)):
+                        Text("${documents["Tomorrow"]}",style: TextStyle(fontSize: 20,color: Colors.white)),
                       ],
                     ),
                   ),),

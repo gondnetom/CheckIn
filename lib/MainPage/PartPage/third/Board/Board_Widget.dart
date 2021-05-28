@@ -32,7 +32,7 @@ class _Board_WidgetState extends State<Board_Widget> {
             children: [
               Text("${widget.documents["Title"]}",style: TextStyle(color: Colors.black,fontSize: 20),),
               SizedBox(height: 1,),
-              Text("좋아요: ${widget.documents["Like"].length}",style: TextStyle(color: Colors.black,fontSize: 12),),
+              Text("좋아요: ${widget.documents["LikeCnt"]}",style: TextStyle(color: Colors.black,fontSize: 12),),
               Text("${widget.documents["Uid"]==widget.uid ? "나": widget.documents["Uid"].toString().substring(0,5)}  ${widget.documents["Time"]}",style: TextStyle(color: Colors.black,fontSize: 10),),
             ],
           )

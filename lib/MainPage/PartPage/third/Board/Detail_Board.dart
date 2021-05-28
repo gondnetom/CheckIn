@@ -47,13 +47,13 @@ class _DetailBaordState extends State<DetailBaord> {
     if(!likecheck){
       //like
       await FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).
-      collection("Posts").doc(widget.documents.id).update({'Like':FieldValue.arrayUnion([widget.uid])});
+      collection("Posts").doc(widget.documents.id).update({'Like':FieldValue.arrayUnion([widget.uid]),'LikeCnt':FieldValue.increment(1)});
       setState(() {
         likecheck = true;
       });
     }else{
       await FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).
-      collection("Posts").doc(widget.documents.id).update({'Like':FieldValue.arrayRemove([widget.uid])});
+      collection("Posts").doc(widget.documents.id).update({'Like':FieldValue.arrayRemove([widget.uid]),'LikeCnt':FieldValue.increment(-1)});
       setState(() {
         likecheck = false;
       });
@@ -68,7 +68,7 @@ class _DetailBaordState extends State<DetailBaord> {
   @override
   Widget build(BuildContext context) {
     currentStream = FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Posts").
-    doc(widget.documents.id).collection("Comments").limit(100).
+    doc(widget.documents.id).collection("Comments").orderBy("MilliTime").limit(100).
     snapshots();
 
     return Scaffold(
@@ -81,7 +81,7 @@ class _DetailBaordState extends State<DetailBaord> {
         ),
         actions: [
           IconButton(
-            icon:Icon(CupertinoIcons.plus,color:Color(0xff4d4d4d)),
+            icon:Icon(CupertinoIcons.ellipses_bubble,color:Color(0xff4d4d4d)),
             onPressed: (){
               Navigator.push(
                   context,

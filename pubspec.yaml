@@ -1,7 +1,7 @@
 name: checkschool
 description: 기숙관리 어플리케이션
 publish_to: 'none'
-version: 2.1.0+14
+version: 2.2.1+16
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -43,7 +43,7 @@ dependencies:
   modal_bottom_sheet: ^2.0.0
 
   #setting
-  url_launcher: ^6.0.3
+  url_launcher: ^6.0.4
   location: ^4.1.1
 
   #post

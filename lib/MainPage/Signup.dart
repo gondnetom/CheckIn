@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -34,6 +35,14 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Sign Up",style: TextStyle(fontSize: 30,color: Colors.black)),
+        actions: [
+          IconButton(
+            icon:Icon(CupertinoIcons.xmark_octagon,color: Colors.black,),
+            onPressed: (){
+              FirebaseAuth.instance.signOut();
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

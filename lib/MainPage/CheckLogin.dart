@@ -6,7 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wifi_info_flutter/wifi_info_flutter.dart';
 import 'package:location/location.dart';
@@ -24,7 +23,10 @@ class _CheckState extends State<Check> {
 
   //#region Check Wifi and Alert
   var subscription;
-  var _flutterLocalNotificationsPlugin;
+  var _flutterLocalNotificationsPluginMon;
+  var _flutterLocalNotificationsPluginTue;
+  var _flutterLocalNotificationsPluginWed;
+  var _flutterLocalNotificationsPluginTur;
 
   @override
   initState() {
@@ -42,8 +44,14 @@ class _CheckState extends State<Check> {
 
     var initializationSettings = InitializationSettings(android: initializationSettingsAndroid,iOS: initializationSettingsIOS);
 
-    _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    _flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    _flutterLocalNotificationsPluginMon = FlutterLocalNotificationsPlugin();
+    _flutterLocalNotificationsPluginMon.initialize(initializationSettings);
+    _flutterLocalNotificationsPluginTue = FlutterLocalNotificationsPlugin();
+    _flutterLocalNotificationsPluginTue.initialize(initializationSettings);
+    _flutterLocalNotificationsPluginWed = FlutterLocalNotificationsPlugin();
+    _flutterLocalNotificationsPluginWed.initialize(initializationSettings);
+    _flutterLocalNotificationsPluginTur = FlutterLocalNotificationsPlugin();
+    _flutterLocalNotificationsPluginTur.initialize(initializationSettings);
 
     _dailyAtTimeNotification();
   }
@@ -54,18 +62,45 @@ class _CheckState extends State<Check> {
     subscription.cancel();
   }
   Future<void> _dailyAtTimeNotification() async {
-    var time = Time(21, 53, 0);
+    var time = Time(18, 45, 0);
     var android = AndroidNotificationDetails(
         'your channel id', 'your channel name', 'your channel description',
         importance: Importance.max, priority: Priority.high);
     var ios = IOSNotificationDetails();
-
     var detail = NotificationDetails(android: android,iOS: ios);
 
-    await _flutterLocalNotificationsPlugin.showDailyAtTime(
+    await _flutterLocalNotificationsPluginMon.showWeeklyAtDayAndTime(
       0,
       '출석체크를 해주세요!',
       '사감선생님이 당신을 찾고 있습니다!',
+      Day.monday,
+      time,
+      detail,
+      payload: 'CheckIn',
+    );
+    await _flutterLocalNotificationsPluginTue.showWeeklyAtDayAndTime(
+      0,
+      '출석체크를 해주세요!',
+      '사감선생님이 당신을 찾고 있습니다!',
+      Day.tuesday,
+      time,
+      detail,
+      payload: 'CheckIn',
+    );
+    await _flutterLocalNotificationsPluginWed.showWeeklyAtDayAndTime(
+      0,
+      '출석체크를 해주세요!',
+      '사감선생님이 당신을 찾고 있습니다!',
+      Day.wednesday,
+      time,
+      detail,
+      payload: 'CheckIn',
+    );
+    await _flutterLocalNotificationsPluginTur.showWeeklyAtDayAndTime(
+      0,
+      '출석체크를 해주세요!',
+      '사감선생님이 당신을 찾고 있습니다!',
+      Day.thursday,
       time,
       detail,
       payload: 'CheckIn',

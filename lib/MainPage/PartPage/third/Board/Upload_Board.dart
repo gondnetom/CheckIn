@@ -302,7 +302,7 @@ class _UploadPostState extends State<UploadPost> {
     collection("Posts").doc("${widget.uid}${NowMilliTime}").
     set({'Uid':widget.uid,
       'Title':Topic_textController.text,
-      'Text':Text_textController.text,
+      'Text':Text_textController.text,'LikeCnt':0,
       'MilliTime':NowMilliTime,'Time':NowTime,
       'Like':[],'Report':[],'Image':downloadUrl});
 

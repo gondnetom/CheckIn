@@ -28,12 +28,11 @@ class _An_BoardState extends State<An_Board> {
     if(segmentedControlGroupValue == 0){
       currentStream = FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Posts").
       orderBy("Time",descending: true).
-      orderBy("Like",descending: true).limit(100).
+      orderBy("LikeCnt",descending: true).limit(50).
       snapshots();
     }
     else{
       currentStream = FirebaseFirestore.instance.collection("Users").doc(widget.SchoolName).collection("Posts").
-
       orderBy("MilliTime",descending: true).limit(100).
       snapshots();
     }

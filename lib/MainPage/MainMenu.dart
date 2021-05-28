@@ -55,7 +55,7 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
             }
             else{
               return DefaultTabController(
-                length: 3,
+                length: 2,
                 child: Scaffold(
                   appBar: AppBar(
                     title: Text("CheckIn",style: TextStyle(fontSize: 30,color: Colors.black)),
@@ -82,10 +82,6 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
                         icon: Icon(CupertinoIcons.calendar_today),
                         text: 'Daily',
                       ),
-                      Tab(
-                        icon: Icon(CupertinoIcons.book),
-                        text: 'Contents',
-                      ),
                     ],
                     labelColor: Colors.blue,
                     unselectedLabelColor: Colors.grey,
@@ -94,7 +90,6 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
                     children: [
                       CheckFirstPage(),
                       SecondPage(documents["Grade"],documents["Class"],widget.SchoolName,widget.uid),
-                      ThirdPage(widget.SchoolName, widget.uid)
                     ],
                   ),
                 ),
