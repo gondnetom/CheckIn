@@ -118,6 +118,7 @@ class _SecondPageState extends State<SecondPage> with AutomaticKeepAliveClientMi
   Widget build(BuildContext context) {
     return ListView(
       children: [
+        /*
         FutureBuilder(
           future: getTimeTable(widget.Grade, widget.Class, widget.SchoolName),
           builder: (context,snapshot){
@@ -226,6 +227,7 @@ class _SecondPageState extends State<SecondPage> with AutomaticKeepAliveClientMi
             }
           }
         ),
+         */
         FutureBuilder(
             future: getFoodList(widget.Grade, widget.Class,widget.SchoolName),
             builder: (context,snapshot){
