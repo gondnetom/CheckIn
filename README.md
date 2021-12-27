@@ -1,4 +1,4 @@
-# checkschool
+# CheckIn
 
 This is a dormitory management application in GBSHS
 
